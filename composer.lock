@@ -852,12 +852,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thiagohofmeister/utils.git",
-                "reference": "f50dba20897bbb8f826438abe1c0d05279cee114"
+                "reference": "263426cb2d02b4d691eff8db4755250fb6299db0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thiagohofmeister/utils/zipball/f50dba20897bbb8f826438abe1c0d05279cee114",
-                "reference": "f50dba20897bbb8f826438abe1c0d05279cee114",
+                "url": "https://api.github.com/repos/thiagohofmeister/utils/zipball/263426cb2d02b4d691eff8db4755250fb6299db0",
+                "reference": "263426cb2d02b4d691eff8db4755250fb6299db0",
                 "shasum": ""
             },
             "require": {
@@ -885,7 +885,7 @@
                 }
             ],
             "description": "Classes de utils",
-            "time": "2018-10-25T23:12:54+00:00"
+            "time": "2018-10-26T22:44:08+00:00"
         }
     ],
     "packages-dev": [
