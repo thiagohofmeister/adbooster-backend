@@ -7,9 +7,9 @@ use THS\Utils\Enum\Label;
 /**
  * Enum de gêneros.
  *
- * @method Gender MALE()
- * @method Gender FEMALE()
- * @method Gender OTHER()
+ * @method static Gender MALE()
+ * @method static Gender FEMALE()
+ * @method static Gender OTHER()
  *
  * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
  */
