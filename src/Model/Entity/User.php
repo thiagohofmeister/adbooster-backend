@@ -2,6 +2,7 @@
 
 namespace App\Model\Entity;
 
+use App\Enum;
 use THS\Utils\Date;
 use App\Model\Element;
 
@@ -15,7 +16,7 @@ class User extends EntityAbstract
     /** @var string */
     private $name;
 
-    /** @var string Email. */
+    /** @var string */
     private $email;
 
     /** @var string */
@@ -44,6 +45,15 @@ class User extends EntityAbstract
 
     /** @var \DateTime Data de cadastro. */
     private $date;
+
+    /** @var Enum\Gender */
+    private $gender;
+
+    /** @var Element\User\Address */
+    private $billingAddress;
+
+    /** @var Element\User\Address[] */
+    private $shippingAddresses;
 
     /**
      * Retorna a propriedade {@see User::$name}.
@@ -299,10 +309,84 @@ class User extends EntityAbstract
     }
 
     /**
+     * Retorna a propriedade {@see User::$gender}.
+     *
+     * @return Enum\Gender
+     */
+    public function getGender(): ?Enum\Gender
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Define a propriedade {@see User::$gender}.
+     *
+     * @param Enum\Gender $gender
+     *
+     * @return static|User
+     */
+    public function setGender(?Enum\Gender $gender)
+    {
+        $this->gender = $gender;
+        return $this;
+    }
+
+    /**
+     * Retorna a propriedade {@see User::$billingAddress}.
+     *
+     * @return Element\User\Address
+     */
+    public function getBillingAddress(): ?Element\User\Address
+    {
+        return $this->billingAddress;
+    }
+
+    /**
+     * Define a propriedade {@see User::$billingAddress}.
+     *
+     * @param Element\User\Address $billingAddress
+     *
+     * @return static|User
+     */
+    public function setBillingAddress(?Element\User\Address $billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
+        return $this;
+    }
+
+    /**
+     * Retorna a propriedade {@see User::$shippedAddresses}.
+     *
+     * @return Element\User\Address[]
+     */
+    public function getShippingAddresses()
+    {
+        return $this->shippingAddresses;
+    }
+
+    /**
+     * Define a propriedade {@see User::$shippedAddresses}.
+     *
+     * @param Element\User\Address[] $shippingAddresses
+     *
+     * @return static|User
+     */
+    public function setShippingAddresses($shippingAddresses)
+    {
+        $this->shippingAddresses = $shippingAddresses;
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toArray(): array
     {
+        $shippingAddresses = [];
+        foreach ($this->getShippingAddresses() as $shippingAddress) {
+            $shippingAddresses[] = $shippingAddress->toArray();
+        }
+
         $toArray = [
             'name' => $this->getName(),
             'email' => $this->getEmail(),
@@ -315,6 +399,9 @@ class User extends EntityAbstract
             'invitedBy' => !empty($this->getInvitedBy()) ? $this->getInvitedBy()->toArray() : null,
             'authentication' => !empty($this->getAuthentication()) ? $this->getAuthentication()->toArray() : null,
             'date' => $this->getDate()->format(Date::JAVASCRIPT_ISO_FORMAT),
+            'gender' => $this->getGender()->value(),
+            'billingAddress' => !empty($this->getBillingAddress()) ? $this->getBillingAddress()->toArray() : null,
+            'shippingAddresses' => $shippingAddresses
         ];
 
         if (!empty($this->getId())) {
@@ -329,6 +416,20 @@ class User extends EntityAbstract
      */
     public static function fromArray(array $array)
     {
+        try {
+
+            $gender = Enum\Gender::memberByValue($array['gender']);
+
+        } catch (\Exception $exception) {
+
+            $gender = null;
+        }
+
+        $shippingAddresses = [];
+        foreach ($array['shippingAddresses'] as $shippingAddress) {
+            $shippingAddresses[] = Element\User\Address::fromArray((array) $shippingAddress);
+        }
+
         return (new static($array['_id']))
             ->setName($array['name'])
             ->setEmail($array['email'])
@@ -340,6 +441,9 @@ class User extends EntityAbstract
             ->setPersonalDocument($array['personalDocument'])
             ->setInvitedBy(!empty((array) $array['invitedBy']) ? Element\User\Standard::fromArray((array) $array['invitedBy']) : null)
             ->setAuthentication(!empty((array) $array['authentication']) ? Element\User\Authentication::fromArray((array) $array['authentication']) : null)
-            ->setDate(new \DateTime($array['date']));
+            ->setDate(new \DateTime($array['date']))
+            ->setGender($gender)
+            ->setBillingAddress(!empty((array) $array['billingAddress']) ? Element\User\Address::fromArray((array) $array['billingAddress']) : null)
+            ->setShippingAddresses($shippingAddresses);
     }
 }
