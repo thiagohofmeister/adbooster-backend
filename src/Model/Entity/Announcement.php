@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Enum;
+use App\Model\Element;
 
 /**
  * Modelagem do anúncio.
@@ -16,6 +17,9 @@ class Announcement extends EntityAbstract
 
     /** @var string */
     private $description;
+
+    /** @var Element\User\Standard Criador do anúncio. */
+    private $creator;
 
     /** @var float */
     private $previousPrice;
@@ -84,6 +88,29 @@ class Announcement extends EntityAbstract
     public function setDescription(string $description)
     {
         $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * Retorna a propriedade {@see Announcement::$creator}.
+     *
+     * @return Element\User\Standard
+     */
+    public function getCreator(): Element\User\Standard
+    {
+        return $this->creator;
+    }
+
+    /**
+     * Define a propriedade {@see Announcement::$creator}.
+     *
+     * @param Element\User\Standard $creator
+     *
+     * @return static|Announcement
+     */
+    public function setCreator(Element\User\Standard $creator)
+    {
+        $this->creator = $creator;
         return $this;
     }
 
@@ -279,6 +306,7 @@ class Announcement extends EntityAbstract
         return [
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
+            'creator' => $this->getCreator()->toArray(),
             'previousPrice' => $this->getPreviousPrice(),
             'currentPrice' => $this->getCurrentPrice(),
             'impulsePayoutLimit' => $this->getImpulsePayoutLimit(),
@@ -298,6 +326,7 @@ class Announcement extends EntityAbstract
         return (new static)
             ->setTitle($array['title'])
             ->setDescription($array['description'])
+            ->setCreator(Element\User\Standard::fromArray($array['creator']))
             ->setPreviousPrice($array['previousPrice'])
             ->setCurrentPrice($array['currentPrice'])
             ->setImpulsePayoutLimit($array['impulsePayoutLimit'])
