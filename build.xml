@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Marketplace - Backend" default="main">
+    <target name="lint" description="">
+        <apply executable="php" failonerror="true">
+            <arg value="-l" />
+
+            <fileset dir="${basedir}/src">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+
+            <fileset dir="${basedir}/tests">
+                <include name="**/*.php" />
+                <modified />
+            </fileset>
+        </apply>
+    </target>
+
+    <target name="phpunit">
+        <exec executable="vendor/bin/phpunit" failonerror="true">
+            <arg value="${basedir}/tests/"/>
+
+            <arg value="--configuration"/>
+            <arg path="${basedir}/phpunit.xml"/>
+
+            <arg value="--no-coverage"/>
+        </exec>
+    </target>
+</project>

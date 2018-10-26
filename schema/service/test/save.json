@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "properties": {
+    "invoice": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "string",
+          "minLength": 1
+        },
+        "serial": {
+          "type": "string",
+          "minLength": 1
+        },
+        "key": {
+          "type": "string",
+          "maxLength": 44,
+          "minLength": 44
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1
+        }
+      },
+      "required": ["number", "serial", "key", "date"]
+    },
+    "shipping": {
+      "type": "object",
+      "properties": {
+        "trackingCode": {
+          "type": ["string", "null"],
+          "minLength": 1
+        },
+        "postDate": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "deliveryDate": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        }
+      },
+      "required": ["trackingCode", "postDate", "deliveryDate"]
+    }
+  },
+  "required": ["invoice", "shipping"]
+}

@@ -1,0 +1,30 @@
+version: 0.2
+phases:
+  install:
+    commands:
+    - apt-get update -y
+    - apt-get install -y ssh-client
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    - php -r "unlink('composer-setup.php');"
+  pre_build:
+    commands:
+    - "[ -d ~/.ssh ] || mkdir ~/.ssh"
+    - chmod 700 ~/.ssh
+    - echo "$SSH_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+    - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+    - IMAGE_TAG=$(echo $CODEBUILD_BUILD_ID | cut -d ":" -f 2)
+  build:
+    commands:
+    - composer install --ignore-platform-reqs
+    - docker build -t $REPOSITORY_URI:latest .
+    - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+    - docker push $REPOSITORY_URI:latest
+    - docker push $REPOSITORY_URI:$IMAGE_TAG
+    - printf '[{"name":"app","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json
