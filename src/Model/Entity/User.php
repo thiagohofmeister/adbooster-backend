@@ -55,6 +55,9 @@ class User extends EntityAbstract
     /** @var Element\User\Address[] */
     private $shippingAddresses;
 
+    /** @var double Dinheiro do usuário. */
+    private $coins;
+
     /**
      * Retorna a propriedade {@see User::$name}.
      *
@@ -378,6 +381,29 @@ class User extends EntityAbstract
     }
 
     /**
+     * Retorna a propriedade {@see User::$coins}.
+     *
+     * @return float
+     */
+    public function getCoins(): float
+    {
+        return $this->coins;
+    }
+
+    /**
+     * Define a propriedade {@see User::$coins}.
+     *
+     * @param float $coins
+     *
+     * @return static|User
+     */
+    public function setCoins(float $coins)
+    {
+        $this->coins = $coins;
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toArray(): array
@@ -401,7 +427,8 @@ class User extends EntityAbstract
             'date' => $this->getDate()->format(Date::JAVASCRIPT_ISO_FORMAT),
             'gender' => $this->getGender()->value(),
             'billingAddress' => !empty($this->getBillingAddress()) ? $this->getBillingAddress()->toArray() : null,
-            'shippingAddresses' => $shippingAddresses
+            'shippingAddresses' => $shippingAddresses,
+            'coins' => $this->getCoins()
         ];
 
         if (!empty($this->getId())) {
@@ -444,6 +471,7 @@ class User extends EntityAbstract
             ->setDate(new \DateTime($array['date']))
             ->setGender($gender)
             ->setBillingAddress(!empty((array) $array['billingAddress']) ? Element\User\Address::fromArray((array) $array['billingAddress']) : null)
-            ->setShippingAddresses($shippingAddresses);
+            ->setShippingAddresses($shippingAddresses)
+            ->setCoins($array['coins']);
     }
 }
