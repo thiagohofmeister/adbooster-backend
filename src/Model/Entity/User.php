@@ -234,7 +234,7 @@ class User extends EntityAbstract
      *
      * @return Element\User\Standard
      */
-    public function getInvitedBy(): Element\User\Standard
+    public function getInvitedBy(): ?Element\User\Standard
     {
         return $this->invitedBy;
     }
@@ -246,7 +246,7 @@ class User extends EntityAbstract
      *
      * @return static|User
      */
-    public function setInvitedBy(Element\User\Standard $invitedBy)
+    public function setInvitedBy(?Element\User\Standard $invitedBy)
     {
         $this->invitedBy = $invitedBy;
         return $this;
@@ -257,7 +257,7 @@ class User extends EntityAbstract
      *
      * @return Element\User\Authentication
      */
-    public function getAuthentication(): Element\User\Authentication
+    public function getAuthentication(): ?Element\User\Authentication
     {
         return $this->authentication;
     }
@@ -269,7 +269,7 @@ class User extends EntityAbstract
      *
      * @return static|User
      */
-    public function setAuthentication(Element\User\Authentication $authentication)
+    public function setAuthentication(?Element\User\Authentication $authentication)
     {
         $this->authentication = $authentication;
         return $this;
