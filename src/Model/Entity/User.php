@@ -55,7 +55,7 @@ class User extends EntityAbstract
     /** @var Element\User\Address[] */
     private $shippingAddresses;
 
-    /** @var double Dinheiro do usuário. */
+    /** @var float Dinheiro do usuário. */
     private $coins;
 
     /**
