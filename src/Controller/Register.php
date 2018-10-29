@@ -64,7 +64,6 @@ class Register extends Controller
             // previne fatal error
         }
 
-
         $user->hashPassword();
 
         $this->userRepository->save($user);
