@@ -5,6 +5,7 @@ namespace App\Model\Entity;
 use App\Enum;
 use THS\Utils\Date;
 use App\Model\Element;
+use THS\Utils\Hash;
 
 /**
  * Representa a modelagem dos usuários do sistema.
@@ -109,7 +110,7 @@ class User extends EntityAbstract
      *
      * @return string
      */
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -121,7 +122,7 @@ class User extends EntityAbstract
      *
      * @return static|User
      */
-    public function setPhone(string $phone)
+    public function setPhone(?string $phone)
     {
         $this->phone = $phone;
         return $this;
@@ -132,7 +133,7 @@ class User extends EntityAbstract
      *
      * @return string
      */
-    public function getMobile(): string
+    public function getMobile(): ?string
     {
         return $this->mobile;
     }
@@ -144,7 +145,7 @@ class User extends EntityAbstract
      *
      * @return static|User
      */
-    public function setMobile(string $mobile)
+    public function setMobile(?string $mobile)
     {
         $this->mobile = $mobile;
         return $this;
@@ -178,7 +179,7 @@ class User extends EntityAbstract
      *
      * @return string
      */
-    public function getDocumentNumber(): string
+    public function getDocumentNumber(): ?string
     {
         return $this->documentNumber;
     }
@@ -190,7 +191,7 @@ class User extends EntityAbstract
      *
      * @return static|User
      */
-    public function setDocumentNumber(string $documentNumber)
+    public function setDocumentNumber(?string $documentNumber)
     {
         $this->documentNumber = $documentNumber;
         return $this;
@@ -201,7 +202,7 @@ class User extends EntityAbstract
      *
      * @return \DateTime
      */
-    public function getDob(): \DateTime
+    public function getDob(): ?\DateTime
     {
         return $this->dob;
     }
@@ -213,7 +214,7 @@ class User extends EntityAbstract
      *
      * @return static|User
      */
-    public function setDob(\DateTime $dob)
+    public function setDob(?\DateTime $dob)
     {
         $this->dob = $dob;
         return $this;
@@ -224,7 +225,7 @@ class User extends EntityAbstract
      *
      * @return string
      */
-    public function getPersonalDocument(): string
+    public function getPersonalDocument(): ?string
     {
         return $this->personalDocument;
     }
@@ -236,7 +237,7 @@ class User extends EntityAbstract
      *
      * @return static|User
      */
-    public function setPersonalDocument(string $personalDocument)
+    public function setPersonalDocument(?string $personalDocument)
     {
         $this->personalDocument = $personalDocument;
         return $this;
@@ -316,7 +317,7 @@ class User extends EntityAbstract
      *
      * @return Enum\Gender
      */
-    public function getGender(): ?Enum\Gender
+    public function getGender(): Enum\Gender
     {
         return $this->gender;
     }
@@ -328,7 +329,7 @@ class User extends EntityAbstract
      *
      * @return static|User
      */
-    public function setGender(?Enum\Gender $gender)
+    public function setGender(Enum\Gender $gender)
     {
         $this->gender = $gender;
         return $this;
@@ -385,7 +386,7 @@ class User extends EntityAbstract
      *
      * @return float
      */
-    public function getCoins(): float
+    public function getCoins()
     {
         return $this->coins;
     }
@@ -397,7 +398,7 @@ class User extends EntityAbstract
      *
      * @return static|User
      */
-    public function setCoins(float $coins)
+    public function setCoins($coins)
     {
         $this->coins = $coins;
         return $this;
@@ -473,5 +474,17 @@ class User extends EntityAbstract
             ->setBillingAddress(!empty((array) $array['billingAddress']) ? Element\User\Address::fromArray((array) $array['billingAddress']) : null)
             ->setShippingAddresses($shippingAddresses)
             ->setCoins($array['coins']);
+    }
+
+    /**
+     * Transforma a senha do usuário em uma hash.
+     *
+     * @return static|User
+     */
+    public function hashPassword()
+    {
+        $this->password = Hash::make($this->getPassword());
+
+        return $this;
     }
 }

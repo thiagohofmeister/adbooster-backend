@@ -13,12 +13,8 @@ use THS\Utils\Enum\HttpStatusCode;
  */
 class User extends Contract
 {
-    public function register()
+    public function index()
     {
-        $body = $this->getRequest()->getParsedBody();
 
-        $user = Entity\User::fromArray($body);
-
-        return Base\Response::create($user->toArray(), HttpStatusCode::OK());
     }
 }

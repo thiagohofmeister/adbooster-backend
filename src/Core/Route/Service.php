@@ -55,21 +55,4 @@ class Service extends AbstractRoute
             Middleware\Authentication\User::class,
         ];
     }
-
-    /*
-    private function injectService(string $serviceName) {
-        $moduleDefinition = $moduleDefinitionRepository->getByTypeAndIdentifier($moduleType, $moduleIdentifier);
-        $this->container->set(Entity\Module\Definition::class, $moduleDefinition);
-        $this->container->set("{$moduleType}.{$moduleIdentifier}.module_definition", $moduleDefinition);
-
-        try {
-
-            $module = $moduleRepository->getByTypeAndIdentifier($moduleType, $moduleIdentifier);
-            $this->container->set(Entity\Module::class, $module);
-            $this->container->set("{$moduleType}.{$moduleIdentifier}.module", $module);
-
-        } catch (DataNotFoundException $dataNotFoundException) {
-            // Previne fatal error
-        }
-    }*/
 }

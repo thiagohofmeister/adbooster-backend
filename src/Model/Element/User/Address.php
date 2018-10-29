@@ -32,6 +32,9 @@ class Address extends ElementAbstract
     /** @var string */
     private $zipCode;
 
+    /** @var string */
+    private $complement;
+
     /**
      * Retorna a propriedade {@see Address::$state}.
      *
@@ -194,6 +197,29 @@ class Address extends ElementAbstract
     }
 
     /**
+     * Retorna a propriedade {@see Address::$complement}.
+     *
+     * @return string
+     */
+    public function getComplement(): string
+    {
+        return $this->complement;
+    }
+
+    /**
+     * Define a propriedade {@see Address::$complement}.
+     *
+     * @param string $complement
+     *
+     * @return static|Address
+     */
+    public function setComplement(string $complement)
+    {
+        $this->complement = $complement;
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toArray(): array
@@ -206,6 +232,7 @@ class Address extends ElementAbstract
             'number' => $this->getNumber(),
             'reference' => $this->getReference(),
             'zipCode' => $this->getZipCode(),
+            'complement' => $this->getComplement(),
         ];
     }
 
@@ -221,6 +248,7 @@ class Address extends ElementAbstract
             ->setStreet($array['street'])
             ->setNumber($array['number'])
             ->setReference($array['reference'])
-            ->setZipCode($array['zipCode']);
+            ->setZipCode($array['zipCode'])
+            ->setComplement($array['complement']);
     }
 }
