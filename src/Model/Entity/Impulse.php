@@ -3,7 +3,7 @@
 namespace App\Model\Entity;
 
 /**
- * @todo Document class Impulse.
+ * Modelagem de impulsos dos anúncios.
  *
  * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
  */

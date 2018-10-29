@@ -5,7 +5,7 @@ namespace App\Model\Element\User;
 use App\Model\Element\ElementAbstract;
 
 /**
- * @todo Document class Address.
+ * Elemento de endereço do cliente.
  *
  * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
  */
