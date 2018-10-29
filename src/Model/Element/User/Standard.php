@@ -12,54 +12,54 @@ use App\Model\Element\ElementAbstract;
 class Standard extends ElementAbstract
 {
     /** @var string */
-    private $email;
+    private $code;
 
     /** @var string */
-    private $documentNumber;
+    private $nome;
 
     /**
-     * Retorna a propriedade {@see Standard::$email}.
+     * Retorna a propriedade {@see Standard::$code}.
      *
      * @return string
      */
-    public function getEmail(): string
+    public function getCode(): string
     {
-        return $this->email;
+        return $this->code;
     }
 
     /**
-     * Define a propriedade {@see Standard::$email}.
+     * Define a propriedade {@see Standard::$code}.
      *
-     * @param string $email
+     * @param string $code
      *
      * @return static|Standard
      */
-    public function setEmail(string $email)
+    public function setCode(string $code)
     {
-        $this->email = $email;
+        $this->code = $code;
         return $this;
     }
 
     /**
-     * Retorna a propriedade {@see Standard::$documentNumber}.
+     * Retorna a propriedade {@see Standard::$nome}.
      *
      * @return string
      */
-    public function getDocumentNumber(): string
+    public function getNome(): string
     {
-        return $this->documentNumber;
+        return $this->nome;
     }
 
     /**
-     * Define a propriedade {@see Standard::$documentNumber}.
+     * Define a propriedade {@see Standard::$nome}.
      *
-     * @param string $documentNumber
+     * @param string $nome
      *
      * @return static|Standard
      */
-    public function setDocumentNumber(string $documentNumber)
+    public function setNome(string $nome)
     {
-        $this->documentNumber = $documentNumber;
+        $this->nome = $nome;
         return $this;
     }
 
@@ -69,8 +69,8 @@ class Standard extends ElementAbstract
     public function toArray(): array
     {
         return [
-            'email' => $this->getEmail(),
-            'documentNumber' => $this->getDocumentNumber(),
+            'code' => $this->getCode(),
+            'nome' => $this->getNome(),
         ];
     }
 
@@ -80,7 +80,7 @@ class Standard extends ElementAbstract
     public static function fromArray(array $array)
     {
         return (new static)
-            ->setEmail($array['email'])
-            ->setDocumentNumber($array['documentNumber']);
+            ->setCode($array['code'])
+            ->setNome($array['nome']);
     }
 }
