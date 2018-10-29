@@ -45,6 +45,9 @@ class Announcement extends EntityAbstract
     /** @var Enum\Announcement\Status */
     private $status;
 
+    /** @var Element\Impulse[] */
+    private $impulses;
+
     /**
      * Retorna a propriedade {@see Announcement::$title}.
      *
@@ -299,10 +302,38 @@ class Announcement extends EntityAbstract
     }
 
     /**
+     * Retorna a propriedade {@see Announcement::$impulses}.
+     *
+     * @return Element\Impulse[]
+     */
+    public function getImpulses()
+    {
+        return $this->impulses;
+    }
+
+    /**
+     * Define a propriedade {@see Announcement::$impulses}.
+     *
+     * @param Element\Impulse[] $impulses
+     *
+     * @return static|Announcement
+     */
+    public function setImpulses($impulses)
+    {
+        $this->impulses = $impulses;
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toArray(): array
     {
+        $impulses = [];
+        foreach ($this->impulses as $impulse) {
+            $impulses[] = $impulse->toArray();
+        }
+
         return [
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
@@ -315,6 +346,7 @@ class Announcement extends EntityAbstract
             'created' => $this->getCreated(),
             'updated' => $this->getUpdated(),
             'status' => $this->getStatus(),
+            'impulses' => $impulses
         ];
     }
 
@@ -323,10 +355,15 @@ class Announcement extends EntityAbstract
      */
     public static function fromArray(array $array)
     {
+        $impulses = [];
+        foreach ($array['impulses'] as $impulse) {
+            $impulses[] = Element\Impulse::fromArray((array) $impulse);
+        }
+
         return (new static)
             ->setTitle($array['title'])
             ->setDescription($array['description'])
-            ->setCreator(Element\User\Standard::fromArray($array['creator']))
+            ->setCreator(Element\User\Standard::fromArray((array) $array['creator']))
             ->setPreviousPrice($array['previousPrice'])
             ->setCurrentPrice($array['currentPrice'])
             ->setImpulsePayoutLimit($array['impulsePayoutLimit'])
@@ -334,6 +371,7 @@ class Announcement extends EntityAbstract
             ->setImages($array['images'])
             ->setCreated($array['created'])
             ->setUpdated($array['updated'])
-            ->setStatus($array['status']);
+            ->setStatus($array['status'])
+            ->setImpulses($impulses);
     }
 }
