@@ -7,7 +7,7 @@ use App\Model\Entity;
 use THS\Utils\Enum\HttpStatusCode;
 
 /**
- * @todo Document class User.
+ * Serviço relacionado aos usuários.
  *
  * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
  */
