@@ -18,6 +18,9 @@ class User extends EntityAbstract
     private $name;
 
     /** @var string */
+    private $message;
+
+    /** @var string */
     private $email;
 
     /** @var string */
@@ -79,6 +82,29 @@ class User extends EntityAbstract
     public function setName(string $name)
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Retorna a propriedade {@see User::$message}.
+     *
+     * @return string
+     */
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    /**
+     * Define a propriedade {@see User::$message}.
+     *
+     * @param string $message
+     *
+     * @return static|User
+     */
+    public function setMessage(?string $message)
+    {
+        $this->message = $message;
         return $this;
     }
 
@@ -416,6 +442,7 @@ class User extends EntityAbstract
 
         $toArray = [
             'name' => $this->getName(),
+            'message' => $this->getMessage(),
             'email' => $this->getEmail(),
             'phone' => $this->getPhone(),
             'mobile' => $this->getMobile(),
@@ -460,6 +487,7 @@ class User extends EntityAbstract
 
         return (new static($array['_id']))
             ->setName($array['name'])
+            ->setMessage($array['message'])
             ->setEmail($array['email'])
             ->setPhone($array['phone'])
             ->setMobile($array['mobile'])
