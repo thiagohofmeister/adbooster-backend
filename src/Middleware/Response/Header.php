@@ -30,6 +30,6 @@ class Header extends MiddlewareAbstract
 
         return $response
             ->withAddedHeader('Access-Control-Allow-Origin', '*')
-            ->withAddedHeader('Access-Control-Allow-Headers', 'Authorization,Content-Type,X-Merchant,Cache-Control,MercadoLivre-Account');
+            ->withAddedHeader('Access-Control-Allow-Headers', 'Authorization,Content-Type,Cache-Control');
     }
 }
