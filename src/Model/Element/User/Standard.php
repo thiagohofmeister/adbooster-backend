@@ -15,7 +15,7 @@ class Standard extends ElementAbstract
     private $code;
 
     /** @var string */
-    private $nome;
+    private $name;
 
     /**
      * Retorna a propriedade {@see Standard::$code}.
@@ -41,25 +41,25 @@ class Standard extends ElementAbstract
     }
 
     /**
-     * Retorna a propriedade {@see Standard::$nome}.
+     * Retorna a propriedade {@see Standard::$name}.
      *
      * @return string
      */
-    public function getNome(): string
+    public function getName(): string
     {
-        return $this->nome;
+        return $this->name;
     }
 
     /**
-     * Define a propriedade {@see Standard::$nome}.
+     * Define a propriedade {@see Standard::$name}.
      *
-     * @param string $nome
+     * @param string $name
      *
      * @return static|Standard
      */
-    public function setNome(string $nome)
+    public function setName(string $name)
     {
-        $this->nome = $nome;
+        $this->name = $name;
         return $this;
     }
 
@@ -70,7 +70,7 @@ class Standard extends ElementAbstract
     {
         return [
             'code' => $this->getCode(),
-            'nome' => $this->getNome(),
+            'name' => $this->getName(),
         ];
     }
 
@@ -81,6 +81,6 @@ class Standard extends ElementAbstract
     {
         return (new static)
             ->setCode($array['code'])
-            ->setNome($array['nome']);
+            ->setName($array['name']);
     }
 }
