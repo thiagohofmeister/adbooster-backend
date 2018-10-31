@@ -18,6 +18,9 @@ class User extends EntityAbstract
     private $name;
 
     /** @var string */
+    private $image;
+
+    /** @var string */
     private $message;
 
     /** @var string */
@@ -82,6 +85,29 @@ class User extends EntityAbstract
     public function setName(string $name)
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Retorna a propriedade {@see User::$image}.
+     *
+     * @return string
+     */
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    /**
+     * Define a propriedade {@see User::$image}.
+     *
+     * @param string $image
+     *
+     * @return static|User
+     */
+    public function setImage(?string $image)
+    {
+        $this->image = $image;
         return $this;
     }
 
@@ -442,6 +468,7 @@ class User extends EntityAbstract
 
         $toArray = [
             'name' => $this->getName(),
+            'image' => $this->getImage(),
             'message' => $this->getMessage(),
             'email' => $this->getEmail(),
             'phone' => $this->getPhone(),
@@ -487,6 +514,7 @@ class User extends EntityAbstract
 
         return (new static($array['_id']))
             ->setName($array['name'])
+            ->setImage($array['image'])
             ->setMessage($array['message'])
             ->setEmail($array['email'])
             ->setPhone($array['phone'])
