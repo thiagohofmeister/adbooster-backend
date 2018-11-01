@@ -3,6 +3,7 @@
 namespace App\Service\Base\Repository;
 
 use App\Exception\Repository\DataNotFoundException;
+use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Database;
 use THS\Utils\Date;
@@ -44,6 +45,32 @@ class User extends AbstractRepository
                     'email' => $email,
                 ],
                 'Usuário não encontrado pelo email'
+            );
+        }
+
+        return $user;
+    }
+
+    /**
+     * Busca um usuário pelo id.
+     *
+     * @param string $userId
+     *
+     * @return Entity\User
+     *
+     * @throws DataNotFoundException
+     */
+    public function getById(string $userId): Entity\User
+    {
+        $user = $this->findOne(['_id' => new ObjectId($userId)]);
+
+        if (empty($user)) {
+
+            throw new DataNotFoundException(
+                [
+                    '_id' => $userId,
+                ],
+                'Usuário não encontrado pelo id'
             );
         }
 

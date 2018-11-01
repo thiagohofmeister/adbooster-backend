@@ -25,7 +25,7 @@ class Announcement extends AbstractRepository
         parent::__construct($database);
     }
 
-    public function getByUser(string $userCode) {
+    public function getByUserAndFriends(string $userCode, $friends = []) {
 
         $query = [];
 
@@ -37,9 +37,23 @@ class Announcement extends AbstractRepository
 
         $query[] = [
             '$match' => [
-                'impulses.owner.code' => $userCode,
+                '$or' => [
+                    ['impulses.owner.code' => $userCode],
+                    ['impulses.owner.code' => ['$in' => $friends]]
+                ]
             ]
         ];
+
+        if ($this->isPaginated()) {
+
+            $queryCount = array_merge($query, [
+                [
+                    '$count' => 'total'
+                ]
+            ]);
+
+            $this->setPaginationTotal(reset($this->collection->aggregate($queryCount)->toArray())['total']);
+        }
 
         $query[] = [
             '$group' => [

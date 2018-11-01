@@ -43,7 +43,7 @@ class Service extends AbstractRoute
      */
     public function getPattern(): string
     {
-        return '/{service}/{method}[/{parameters:.*}]';
+        return '/{service}[/{method}[/{parameters:.*}]]';
     }
 
     /**
