@@ -44,6 +44,12 @@ class Announcement extends AbstractRepository
             ]
         ];
 
+        $query[] = [
+            '$sort' => [
+                'updated' => -1
+            ]
+        ];
+
         if ($this->isPaginated()) {
 
             $queryCount = array_merge($query, [
@@ -68,11 +74,13 @@ class Announcement extends AbstractRepository
             $ids[] = new ObjectId((string) $document['_id']);
         }
 
-        $query = [
+        return $this->find([
             '_id' => ['$in' => $ids]
-        ];
-
-        return $this->find($query);
+        ], [
+            'limit' => $this->getLimit(),
+            'skip' => $this->getOffset(),
+            'sort' => ['updated' => -1]
+        ]);
     }
 
     /**
