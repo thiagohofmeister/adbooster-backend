@@ -4,6 +4,7 @@ namespace App\Model\Entity;
 
 use App\Enum;
 use App\Model\Element;
+use THS\Utils\Date;
 
 /**
  * Modelagem do anúncio.
@@ -343,9 +344,9 @@ class Announcement extends EntityAbstract
             'impulsePayoutLimit' => $this->getImpulsePayoutLimit(),
             'stock' => $this->getStock(),
             'images' => $this->getImages(),
-            'created' => $this->getCreated(),
-            'updated' => $this->getUpdated(),
-            'status' => $this->getStatus(),
+            'created' => $this->getCreated()->format(Date::JAVASCRIPT_ISO_FORMAT),
+            'updated' => $this->getUpdated()->format(Date::JAVASCRIPT_ISO_FORMAT),
+            'status' => $this->getStatus()->value(),
             'impulses' => $impulses
         ];
     }
@@ -368,10 +369,10 @@ class Announcement extends EntityAbstract
             ->setCurrentPrice($array['currentPrice'])
             ->setImpulsePayoutLimit($array['impulsePayoutLimit'])
             ->setStock($array['stock'])
-            ->setImages($array['images'])
-            ->setCreated($array['created'])
-            ->setUpdated($array['updated'])
-            ->setStatus($array['status'])
+            ->setImages(!empty($array['images']) ? (array) $array['images'] : null)
+            ->setCreated(new \DateTime($array['created']))
+            ->setUpdated(new \DateTime($array['updated']))
+            ->setStatus(Enum\Announcement\Status::memberByValue($array['status']))
             ->setImpulses($impulses);
     }
 }

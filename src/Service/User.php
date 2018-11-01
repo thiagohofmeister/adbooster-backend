@@ -3,8 +3,6 @@
 namespace App\Service;
 
 use App\Service\Base\Service\Contract;
-use App\Model\Entity;
-use THS\Utils\Enum\HttpStatusCode;
 
 /**
  * Serviço relacionado aos usuários.

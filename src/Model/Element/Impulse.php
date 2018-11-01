@@ -70,7 +70,7 @@ class Impulse extends ElementAbstract
     {
         return [
             'owner' => $this->getOwner()->toArray(),
-            'origin' => $this->getOrigin()->toArray(),
+            'origin' => !empty($this->getOrigin()) ? $this->getOrigin()->toArray() : null,
         ];
     }
 
@@ -81,6 +81,6 @@ class Impulse extends ElementAbstract
     {
         return (new static)
             ->setOwner(Element\User\Standard::fromArray((array) $array['owner']))
-            ->setOrigin(Element\User\Standard::fromArray((array) $array['origin']));
+            ->setOrigin(!empty((array) $array['origin']) ? Element\User\Standard::fromArray((array) $array['origin']) : null);
     }
 }
