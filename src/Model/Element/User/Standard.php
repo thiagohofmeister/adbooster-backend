@@ -17,6 +17,9 @@ class Standard extends ElementAbstract
     /** @var string */
     private $name;
 
+    /** @var string */
+    private $image;
+
     /**
      * Retorna a propriedade {@see Standard::$code}.
      *
@@ -64,6 +67,29 @@ class Standard extends ElementAbstract
     }
 
     /**
+     * Retorna a propriedade {@see Standard::$image}.
+     *
+     * @return string
+     */
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    /**
+     * Define a propriedade {@see Standard::$image}.
+     *
+     * @param string $image
+     *
+     * @return static|Standard
+     */
+    public function setImage(string $image)
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toArray(): array
@@ -71,6 +97,7 @@ class Standard extends ElementAbstract
         return [
             'code' => $this->getCode(),
             'name' => $this->getName(),
+            'image' => $this->getImage(),
         ];
     }
 
@@ -81,6 +108,7 @@ class Standard extends ElementAbstract
     {
         return (new static)
             ->setCode($array['code'])
-            ->setName($array['name']);
+            ->setName($array['name'])
+            ->setImage($array['image']);
     }
 }
