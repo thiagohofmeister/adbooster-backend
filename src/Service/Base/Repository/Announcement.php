@@ -77,6 +77,24 @@ class Announcement extends AbstractRepository
     }
 
     /**
+     * Preenche os impulsos do anúncio.
+     *
+     * @param Entity\Announcement $announcement
+     *
+     * @return Entity\Announcement
+     *
+     * @throws DataNotFoundException
+     */
+    public function fillImpulses(Entity\Announcement $announcement) {
+
+        $document = $this->findOne(['_id' => $announcement->getId()]);
+
+        $announcement->setImpulses($document->getImpulses());
+
+        return $announcement;
+    }
+
+    /**
      * @inheritDoc
      *
      * @return Entity\Announcement

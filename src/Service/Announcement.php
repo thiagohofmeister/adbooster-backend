@@ -30,17 +30,19 @@ class Announcement extends Contract
      * Retorna os anúncios.
      *
      * @return Base\Response
+     *
+     * @throws DataNotFoundException
      */
     public function index(): Base\Response
     {
         $total = 0;
 
+        $page = $this->getRequest()->getQueryParam('page') ?: 1;
+        $limit = $this->getRequest()->getQueryParam('limit') ?: 0;
+
+        $userCode = $this->getRequest()->getQueryParam('userCode');
+
         try {
-
-            $page = $this->getRequest()->getQueryParam('page') ?: 1;
-            $limit = $this->getRequest()->getQueryParam('limit') ?: 0;
-
-            $userCode = $this->getRequest()->getQueryParam('userCode');
 
             $user = $this->userRepository->getById($userCode);
 
@@ -63,7 +65,16 @@ class Announcement extends Contract
 
         $formattedAnnouncements = [];
         foreach ($announcements as $announcement) {
-            $formattedAnnouncements[] = $announcement->toArray();
+
+            $sharedBy = reset($announcement->getImpulses())->toArray()['owner'];
+
+            $this->announcementRepository->fillImpulses($announcement);
+
+            $announcementFormatted = $announcement->toArray();
+
+            $announcementFormatted['sharedBy'] = $sharedBy;
+
+            $formattedAnnouncements[] = $announcementFormatted;
         }
 
         return Base\Response::create([

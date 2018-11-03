@@ -335,7 +335,7 @@ class Announcement extends EntityAbstract
             $impulses[] = $impulse->toArray();
         }
 
-        return [
+        $toArray = [
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
             'creator' => $this->getCreator()->toArray(),
@@ -347,8 +347,14 @@ class Announcement extends EntityAbstract
             'created' => $this->getCreated()->format(Date::JAVASCRIPT_ISO_FORMAT),
             'updated' => $this->getUpdated()->format(Date::JAVASCRIPT_ISO_FORMAT),
             'status' => $this->getStatus()->value(),
-            'impulses' => $impulses
+            'impulses' => $impulses,
         ];
+
+        if (!empty($this->getId())) {
+            $toArray['_id'] = $this->getId();
+        }
+
+        return $toArray;
     }
 
     /**
@@ -361,7 +367,7 @@ class Announcement extends EntityAbstract
             $impulses[] = Element\Impulse::fromArray((array) $impulse);
         }
 
-        return (new static)
+        return (new static($array['_id']))
             ->setTitle($array['title'])
             ->setDescription($array['description'])
             ->setCreator(Element\User\Standard::fromArray((array) $array['creator']))
