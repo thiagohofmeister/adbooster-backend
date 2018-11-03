@@ -53,6 +53,8 @@ class Authenticate extends Controller
 
         } catch (\Throwable $throwable) {
 
+            ~rt($throwable);
+
             return $this->renderResponse(
                 ['message' => $throwable->getMessage()],
                 HttpStatusCode::UNAUTHORIZED(),

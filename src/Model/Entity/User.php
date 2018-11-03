@@ -494,7 +494,7 @@ class User extends EntityAbstract
 
         $friends = [];
         foreach ($this->getFriends() as $friend) {
-            $friends = $friend->toArray();
+            $friends[] = $friend->toArray();
         }
 
         $toArray = [

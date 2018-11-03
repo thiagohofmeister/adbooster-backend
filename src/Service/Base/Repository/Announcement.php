@@ -61,32 +61,25 @@ class Announcement extends AbstractRepository
             $this->setPaginationTotal(reset($this->collection->aggregate($queryCount)->toArray())['total']);
         }
 
-        $query[] = [
-            '$group' => [
-                '_id' => '$_id'
-            ]
-        ];
+
 
         $documents = $this->collection->aggregate($query);
 
-        $ids = [];
+        $announcements = [];
         foreach ($documents as $document) {
-            $ids[] = new ObjectId((string) $document['_id']);
+
+            $document['impulses'] = [$document['impulses']];
+
+            $announcements[] = $this->fromDocument($document);
         }
 
-        return $this->find([
-            '_id' => ['$in' => $ids]
-        ], [
-            'limit' => $this->getLimit(),
-            'skip' => $this->getOffset(),
-            'sort' => ['updated' => -1]
-        ]);
+        return $announcements;
     }
 
     /**
      * @inheritDoc
      *
-     * @return Entity\User
+     * @return Entity\Announcement
      */
     protected function fromDocument($document)
     {
@@ -106,17 +99,14 @@ class Announcement extends AbstractRepository
     /**
      * @inheritDoc
      *
-     * @param Entity\User $user
+     * @param Entity\Announcement $announcement
      */
-    protected function toDocument($user)
+    protected function toDocument($announcement)
     {
-        $array = $user->toArray();
+        $array = $announcement->toArray();
 
-        $array['date'] = new UTCDateTime($user->getDate());
-
-        if (!empty($array['authentication'])) {
-            $array['authentication']['expires'] = new UTCDateTime($user->getAuthentication()->getExpires());
-        }
+        $array['created'] = new UTCDateTime($announcement->getCreated());
+        $array['updated'] = new UTCDateTime($announcement->getUpdated());
 
         return $array;
     }
