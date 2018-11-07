@@ -97,6 +97,7 @@ class App extends Slim\App
             Route\User::class,
             Route\Authenticate::class,
             Route\Register::class,
+            Route\Image::class,
             Route\Service::class,
         ];
 

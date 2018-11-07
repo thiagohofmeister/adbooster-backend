@@ -1,6 +1,9 @@
 # composer
 /vendor/
 
+# Uploads
+/public/uploads/*.jpg
+
 # Pastas de IDE
 nbproject
 .buildpath
