@@ -53,15 +53,9 @@ class Authenticate extends Controller
 
         } catch (\Throwable $throwable) {
 
-            ~rt($throwable);
-
             return $this->renderResponse(
                 ['message' => $throwable->getMessage()],
-                HttpStatusCode::UNAUTHORIZED(),
-                [
-                    'WWW-Authorization' => 'app',
-                    'Access-Control-Expose-Headers' => 'WWW-Authorization'
-                ]
+                HttpStatusCode::UNAUTHORIZED()
             );
 
         }
