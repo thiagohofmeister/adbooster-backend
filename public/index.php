@@ -11,6 +11,9 @@ set_time_limit(600);
 
 require_once APP . '/vendor/autoload.php';
 
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
+$dotenv->load();
+
 try {
 
     $environment = Environment::memberByValue(getenv('ENVIRONMENT'));

@@ -14,7 +14,8 @@
         "php-di/slim-bridge": "~1.1.0",
         "php-di/php-di": "~5.4.0",
         "thiagohofmeister/utils": "dev-master",
-        "eloquent/enumeration": "5.1.*"
+        "eloquent/enumeration": "5.1.*",
+        "vlucas/phpdotenv": "dev-master"
     },
     "require-dev": {
         "digitalnature/php-ref": "1.2"
