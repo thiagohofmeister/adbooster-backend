@@ -94,7 +94,6 @@ class App extends Slim\App
     {
         $routes = [
             Route\Status::class,
-            Route\User::class,
             Route\Authenticate::class,
             Route\Register::class,
             Route\Image::class,

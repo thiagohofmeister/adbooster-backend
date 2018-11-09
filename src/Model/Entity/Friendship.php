@@ -121,12 +121,18 @@ class Friendship extends EntityAbstract
      */
     public function toArray(): array
     {
-        return [
+        $toArray = [
             'userAdd' => $this->getUserAdd(),
             'userAdded' => $this->getUserAdded(),
             'confirmed' => $this->isConfirmed(),
-            'start' => $this->getStart()->format(Date::JAVASCRIPT_ISO_FORMAT),
+            'start' => !empty($this->getStart()) ? $this->getStart()->format(Date::JAVASCRIPT_ISO_FORMAT) : null,
         ];
+
+        if (!empty($this->getId())) {
+            $toArray['_id'] = $this->getId();
+        }
+
+        return $toArray;
     }
 
     /**
@@ -134,7 +140,7 @@ class Friendship extends EntityAbstract
      */
     public static function fromArray(array $array)
     {
-        return (new static)
+        return (new static($array['_id']))
             ->setUserAdd($array['userAdd'])
             ->setUserAdded($array['userAdded'])
             ->setConfirmed($array['confirmed'])

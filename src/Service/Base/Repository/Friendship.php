@@ -26,7 +26,7 @@ class Friendship extends AbstractRepository
     }
 
     /**
-     * Busca uma amizade pelo código do usuário.
+     * Retorna as amizades de um usuário.
      *
      * @param string $userCode
      * @param bool $isConfirmed
@@ -50,6 +50,42 @@ class Friendship extends AbstractRepository
         }
 
         return $this->find($query);
+    }
+
+    /**
+     * Retorna os pedidos de amizade pendentes de um usuário.
+     *
+     * @param string $userCode
+     *
+     * @return Entity\Friendship[]
+     *
+     * @throws \Exception
+     */
+    public function getFriendshipsPendingByUser(string $userCode)
+    {
+        return $this->find([
+            'userAdded' => $userCode,
+            'confirmed' => false
+        ]);
+    }
+
+    /**
+     * Retorna os pedidos de amizade pendentes de um usuário.
+     *
+     * @param string $loggedUserCode
+     * @param string $inviteUserCode
+     *
+     * @return Entity\Friendship
+     *
+     * @throws DataNotFoundException
+     */
+    public function getFriendshipByUsers(string $loggedUserCode, string $inviteUserCode): Entity\Friendship
+    {
+        return $this->findOne([
+            'userAdded' => $loggedUserCode,
+            'userAdd' => $inviteUserCode,
+            'confirmed' => false
+        ]);
     }
 
     /**

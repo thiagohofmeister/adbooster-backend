@@ -27,6 +27,12 @@ class Authenticate extends Controller
     private $userRepository;
 
     /**
+     * @var Repository\Friendship
+     * @Inject
+     */
+    private $friendshipRepository;
+
+    /**
      * Loga um usuário no sistema a partir do email e senha.
      *
      * @return Response
@@ -59,6 +65,29 @@ class Authenticate extends Controller
             );
 
         }
+    }
+
+    /**
+     * Busca um usuário pelo token.
+     *
+     * @return Response
+     */
+    public function retrieve(): Response
+    {
+        $token = $this->request->getHeaderLine('Authorization');
+
+        try {
+            $user = $this->userRepository->getByToken($token);
+
+            $userFormatted = $user->toArray();
+            $userFormatted['friends'] = (int) count($this->friendshipRepository->getByUserCode($user->getId(), true));
+
+        } catch (\Throwable $throwable) {
+
+            return $this->renderResponse([], HttpStatusCode::NOT_FOUND());
+        }
+
+        return $this->renderResponse($userFormatted, HttpStatusCode::OK());
     }
 
     /**
