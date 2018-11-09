@@ -40,7 +40,7 @@ class User extends Controller
             $user = $this->userRepository->getByToken($token);
 
             $userFormatted = $user->toArray();
-            $userFormatted['friends'] = count($this->friendshipRepository->getByUserCode($user->getId(), true));
+            $userFormatted['friends'] = (int) count($this->friendshipRepository->getByUserCode($user->getId(), true));
 
         } catch (\Throwable $throwable) {
 
