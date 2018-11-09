@@ -65,9 +65,6 @@ class User extends EntityAbstract
     /** @var float Dinheiro do usuário. */
     private $coins;
 
-    /** @var Element\User\Standard[] */
-    private $friends;
-
     /**
      * Retorna a propriedade {@see User::$name}.
      *
@@ -460,29 +457,6 @@ class User extends EntityAbstract
     }
 
     /**
-     * Retorna a propriedade {@see FriendList::$friends}.
-     *
-     * @return Element\User\Standard[]
-     */
-    public function getFriends()
-    {
-        return $this->friends;
-    }
-
-    /**
-     * Define a propriedade {@see FriendList::$friends}.
-     *
-     * @param Element\User\Standard[] $friends
-     *
-     * @return static|FriendList
-     */
-    public function setFriends($friends)
-    {
-        $this->friends = $friends;
-        return $this;
-    }
-
-    /**
      * @inheritDoc
      */
     public function toArray(): array
@@ -490,11 +464,6 @@ class User extends EntityAbstract
         $shippingAddresses = [];
         foreach ($this->getShippingAddresses() as $shippingAddress) {
             $shippingAddresses[] = $shippingAddress->toArray();
-        }
-
-        $friends = [];
-        foreach ($this->getFriends() as $friend) {
-            $friends[] = $friend->toArray();
         }
 
         $toArray = [
@@ -515,7 +484,6 @@ class User extends EntityAbstract
             'billingAddress' => !empty($this->getBillingAddress()) ? $this->getBillingAddress()->toArray() : null,
             'shippingAddresses' => $shippingAddresses,
             'coins' => $this->getCoins(),
-            'friends' => $friends,
         ];
 
         if (!empty($this->getId())) {
@@ -544,11 +512,6 @@ class User extends EntityAbstract
             $shippingAddresses[] = Element\User\Address::fromArray((array) $shippingAddress);
         }
 
-        $friends = [];
-        foreach ($array['friends'] as $friend) {
-            $friends[] = Element\User\Standard::fromArray((array) $friend);
-        }
-
         return (new static($array['_id']))
             ->setName($array['name'])
             ->setImage($array['image'])
@@ -566,8 +529,7 @@ class User extends EntityAbstract
             ->setGender($gender)
             ->setBillingAddress(!empty((array) $array['billingAddress']) ? Element\User\Address::fromArray((array) $array['billingAddress']) : null)
             ->setShippingAddresses($shippingAddresses)
-            ->setCoins($array['coins'])
-            ->setFriends($friends);
+            ->setCoins($array['coins']);
     }
 
     /**

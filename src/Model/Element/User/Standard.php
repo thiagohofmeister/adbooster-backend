@@ -12,13 +12,7 @@ use App\Model\Element\ElementAbstract;
 class Standard extends ElementAbstract
 {
     /** @var string */
-    private $code;
-
-    /** @var string */
-    private $name;
-
-    /** @var string */
-    private $image;
+    protected $code;
 
     /**
      * Retorna a propriedade {@see Standard::$code}.
@@ -44,71 +38,27 @@ class Standard extends ElementAbstract
     }
 
     /**
-     * Retorna a propriedade {@see Standard::$name}.
+     * Converte o elemento para um array esperado pelo documento.
      *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * Define a propriedade {@see Standard::$name}.
-     *
-     * @param string $name
-     *
-     * @return static|Standard
-     */
-    public function setName(string $name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * Retorna a propriedade {@see Standard::$image}.
-     *
-     * @return string
-     */
-    public function getImage(): string
-    {
-        return $this->image;
-    }
-
-    /**
-     * Define a propriedade {@see Standard::$image}.
-     *
-     * @param string $image
-     *
-     * @return static|Standard
-     */
-    public function setImage(string $image)
-    {
-        $this->image = $image;
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
+     * @return array
      */
     public function toArray(): array
     {
         return [
             'code' => $this->getCode(),
-            'name' => $this->getName(),
-            'image' => $this->getImage(),
         ];
     }
 
     /**
-     * @inheritDoc
+     * Cria um elemento a partir dos dados do documento.
+     *
+     * @param array $array
+     *
+     * @return static|ElementAbstract
      */
     public static function fromArray(array $array)
     {
         return (new static)
-            ->setCode($array['code'])
-            ->setName($array['name'])
-            ->setImage($array['image']);
+            ->setCode($array['code']);
     }
 }

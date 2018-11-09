@@ -25,10 +25,10 @@ class Announcement extends Contract
     private $announcementRepository;
 
     /**
-     * @var Base\Repository\User
+     * @var Base\Repository\Friendship
      * @Inject
      */
-    private $userRepository;
+    private $friendshipRepository;
 
     /**
      * Retorna os anúncios.
@@ -48,11 +48,11 @@ class Announcement extends Contract
 
         try {
 
-            $user = $this->userRepository->getById($userCode);
+            $friendships = $this->friendshipRepository->getByUserCode($userCode);
 
             $friends = [];
-            foreach ($user->getFriends() as $friend) {
-                $friends[] = $friend->getCode();
+            foreach ($friendships as $friend) {
+                $friends[] = $friend->getUserAdded();
             }
 
             $announcements = $this->announcementRepository

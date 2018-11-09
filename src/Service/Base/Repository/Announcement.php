@@ -117,14 +117,14 @@ class Announcement extends AbstractRepository
     /**
      * @inheritDoc
      *
-     * @param Entity\Announcement $announcement
+     * @param Entity\Announcement $friendship
      */
-    protected function toDocument($announcement)
+    protected function toDocument($friendship)
     {
-        $array = $announcement->toArray();
+        $array = $friendship->toArray();
 
-        $array['created'] = new UTCDateTime($announcement->getCreated());
-        $array['updated'] = new UTCDateTime($announcement->getUpdated());
+        $array['created'] = new UTCDateTime($friendship->getCreated());
+        $array['updated'] = new UTCDateTime($friendship->getUpdated());
 
         return $array;
     }

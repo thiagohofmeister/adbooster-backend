@@ -21,6 +21,13 @@ class User extends Controller
     private $userRepository;
 
     /**
+     * @var Base\Repository\Friendship
+     * @Inject
+     */
+    private $friendshipRepository;
+
+
+    /**
      * Busca um usuário pelo token.
      *
      * @return Response
@@ -32,11 +39,14 @@ class User extends Controller
         try {
             $user = $this->userRepository->getByToken($token);
 
-        } catch (\Throwable $exception) {
+            $userFormatted = $user->toArray();
+            $userFormatted['friends'] = count($this->friendshipRepository->getByUserCode($user->getId(), true));
+
+        } catch (\Throwable $throwable) {
 
             return $this->renderResponse([], HttpStatusCode::NOT_FOUND());
         }
 
-        return $this->renderResponse($user->toArray(), HttpStatusCode::OK());
+        return $this->renderResponse($userFormatted, HttpStatusCode::OK());
     }
 }

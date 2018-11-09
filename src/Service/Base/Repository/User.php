@@ -182,16 +182,16 @@ class User extends AbstractRepository
     /**
      * @inheritDoc
      *
-     * @param Entity\User $announcement
+     * @param Entity\User $friendship
      */
-    protected function toDocument($announcement)
+    protected function toDocument($friendship)
     {
-        $array = $announcement->toArray();
+        $array = $friendship->toArray();
 
-        $array['date'] = new UTCDateTime($announcement->getDate());
+        $array['date'] = new UTCDateTime($friendship->getDate());
 
         if (!empty($array['authentication'])) {
-            $array['authentication']['expires'] = new UTCDateTime($announcement->getAuthentication()->getExpires());
+            $array['authentication']['expires'] = new UTCDateTime($friendship->getAuthentication()->getExpires());
         }
 
         return $array;

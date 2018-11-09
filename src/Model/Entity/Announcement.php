@@ -19,7 +19,7 @@ class Announcement extends EntityAbstract
     /** @var string */
     private $description;
 
-    /** @var Element\User\Standard Criador do anúncio. */
+    /** @var Element\User\Creator Criador do anúncio. */
     private $creator;
 
     /** @var float */
@@ -98,9 +98,9 @@ class Announcement extends EntityAbstract
     /**
      * Retorna a propriedade {@see Announcement::$creator}.
      *
-     * @return Element\User\Standard
+     * @return Element\User\Creator
      */
-    public function getCreator(): Element\User\Standard
+    public function getCreator(): Element\User\Creator
     {
         return $this->creator;
     }
@@ -108,11 +108,11 @@ class Announcement extends EntityAbstract
     /**
      * Define a propriedade {@see Announcement::$creator}.
      *
-     * @param Element\User\Standard $creator
+     * @param Element\User\Creator $creator
      *
      * @return static|Announcement
      */
-    public function setCreator(Element\User\Standard $creator)
+    public function setCreator(Element\User\Creator $creator)
     {
         $this->creator = $creator;
         return $this;
@@ -370,7 +370,7 @@ class Announcement extends EntityAbstract
         return (new static($array['_id']))
             ->setTitle($array['title'])
             ->setDescription($array['description'])
-            ->setCreator(Element\User\Standard::fromArray((array) $array['creator']))
+            ->setCreator(Element\User\Creator::fromArray((array) $array['creator']))
             ->setPreviousPrice($array['previousPrice'])
             ->setCurrentPrice($array['currentPrice'])
             ->setImpulsePayoutLimit($array['impulsePayoutLimit'])

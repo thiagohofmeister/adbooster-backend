@@ -11,18 +11,18 @@ use App\Model\Element;
  */
 class Impulse extends ElementAbstract
 {
-    /** @var Element\User\Standard Usuário que fez o impulso. */
+    /** @var Element\User\Creator Usuário que fez o impulso. */
     private $owner;
 
-    /** @var Element\User\Standard Usuário que fez o impulso anterior. */
+    /** @var Element\User\Creator Usuário que fez o impulso anterior. */
     private $origin;
 
     /**
      * Retorna a propriedade {@see Impulse::$owner}.
      *
-     * @return User\Standard
+     * @return User\Creator
      */
-    public function getOwner(): User\Standard
+    public function getOwner(): User\Creator
     {
         return $this->owner;
     }
@@ -30,11 +30,11 @@ class Impulse extends ElementAbstract
     /**
      * Define a propriedade {@see Impulse::$owner}.
      *
-     * @param User\Standard $owner
+     * @param User\Creator $owner
      *
      * @return static|Impulse
      */
-    public function setOwner(User\Standard $owner)
+    public function setOwner(User\Creator $owner)
     {
         $this->owner = $owner;
         return $this;
@@ -43,9 +43,9 @@ class Impulse extends ElementAbstract
     /**
      * Retorna a propriedade {@see Impulse::$origin}.
      *
-     * @return User\Standard
+     * @return User\Creator
      */
-    public function getOrigin(): ?User\Standard
+    public function getOrigin(): ?User\Creator
     {
         return $this->origin;
     }
@@ -53,11 +53,11 @@ class Impulse extends ElementAbstract
     /**
      * Define a propriedade {@see Impulse::$origin}.
      *
-     * @param User\Standard $origin
+     * @param User\Creator $origin
      *
      * @return static|Impulse
      */
-    public function setOrigin(?User\Standard $origin)
+    public function setOrigin(?User\Creator $origin)
     {
         $this->origin = $origin;
         return $this;
@@ -80,7 +80,7 @@ class Impulse extends ElementAbstract
     public static function fromArray(array $array)
     {
         return (new static)
-            ->setOwner(Element\User\Standard::fromArray((array) $array['owner']))
-            ->setOrigin(!empty((array) $array['origin']) ? Element\User\Standard::fromArray((array) $array['origin']) : null);
+            ->setOwner(Element\User\Creator::fromArray((array) $array['owner']))
+            ->setOrigin(!empty((array) $array['origin']) ? Element\User\Creator::fromArray((array) $array['origin']) : null);
     }
 }

@@ -48,7 +48,6 @@ class File extends Contract
                     $urls[] = $this->uploadLink . $path . DIRECTORY_SEPARATOR . $fileName;
 
                 } catch (\Throwable $throwable) {
-                    ~rt($throwable);
                     // previne fatal error
                 }
             }
