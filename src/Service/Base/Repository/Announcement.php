@@ -61,7 +61,17 @@ class Announcement extends AbstractRepository
             $this->setPaginationTotal(reset($this->collection->aggregate($queryCount)->toArray())['total']);
         }
 
+        if (!empty($this->getLimit())) {
+            $query[] = [
+                '$limit' => $this->getLimit()
+            ];
+        }
 
+        if (!empty($this->getOffset())) {
+            $query[] = [
+                '$skip' => $this->getOffset()
+            ];
+        }
 
         $documents = $this->collection->aggregate($query);
 

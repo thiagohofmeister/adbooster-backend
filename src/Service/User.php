@@ -26,6 +26,51 @@ class User extends Contract
     private $friendshipRepository;
 
     /**
+     * Retorna lista de usuários.
+     *
+     * @param string $search
+     *
+     * @return Base\Response
+     *
+     * @throws \Exception
+     */
+    public function search(string $search): Base\Response
+    {
+        $total = 0;
+
+        $page = $this->getRequest()->getQueryParam('page') ?: 1;
+        $limit = $this->getRequest()->getQueryParam('limit') ?: 0;
+
+        try {
+
+            $users = $this->userRepository
+                ->setPaginated($page, $limit)
+                ->getBySearch($search);
+
+            $total = $this->userRepository->getPaginationTotal();
+
+        } catch (\Throwable $throwable) {
+
+            $users = [];
+        }
+
+        if (empty($users)) {
+            throw new \Exception('Nenhum usuário encontrado.', HttpStatusCode::NOT_FOUND);
+        }
+
+        $formattedUsers = [];
+        foreach ($users as $user) {
+
+            $formattedUsers[] = $user->toArray();
+        }
+
+        return Base\Response::create([
+            'total' => $total,
+            'items' => $formattedUsers
+        ], HttpStatusCode::OK());
+    }
+
+    /**
      * Busca um usuário pelo token.
      *
      * @return Base\Response

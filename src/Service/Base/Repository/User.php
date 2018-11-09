@@ -52,6 +52,35 @@ class User extends AbstractRepository
     }
 
     /**
+     * Retorna uma lista de usuários pela busca.
+     *
+     * @param string $search
+     *
+     * @return Entity\User[]
+     *
+     * @throws \Exception
+     */
+    public function getBySearch(string $search)
+    {
+        $query = [
+            '$or' => [
+                ['email' => ['$regex' => $search, '$options' => 'gi']],
+                ['name' => ['$regex' => $search, '$options' => 'gi']],
+            ]
+        ];
+
+        if ($this->isPaginated()) {
+
+            $this->setPaginationTotal($this->collection->count($query));
+        }
+
+        return $this->find($query, [
+            'limit' => $this->getLimit(),
+            'skip' => $this->getOffset()
+        ]);
+    }
+
+    /**
      * Busca um usuário pelo id.
      *
      * @param string $userId
