@@ -69,6 +69,11 @@ class Caller
 
             if ($this->request->getMethod() == HttpMethod::POST) {
 
+                if (empty($this->request->getParsedBody()) && empty($this->request->getUploadedFiles())) {
+
+                    throw new \Exception('O corpo da requisição é obrigatório');
+                }
+
                 try {
 
                     $schema = "service/{$actionName}/{$actionMethod}.json";

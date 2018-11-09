@@ -2,10 +2,14 @@
 
 namespace App\Service;
 
+use App\Exception\ApiResponseException;
 use App\Exception\Repository\DataNotFoundException;
+use App\Exception\ValidationException;
 use App\Service\Base\Service\Contract;
 use App\Service\Base;
 use THS\Utils\Enum\HttpStatusCode;
+use App\Model\Entity;
+use App\Enum;
 
 /**
  * Serviço relacionado aos anúncios.
@@ -81,5 +85,63 @@ class Announcement extends Contract
             'total' => $total,
             'items' => $formattedAnnouncements
         ], HttpStatusCode::OK());
+    }
+
+    /**
+     * Publica um anúncio.
+     *
+     * @return Base\Response
+     *
+     * @throws ApiResponseException
+     * @throws ValidationException
+     */
+    public function publish()
+    {
+        try {
+
+            $body = $this->prepareBuildToSave($this->getRequest()->getParsedBody());
+
+            $announcement = Entity\Announcement::fromArray($body);
+
+            if ($announcement->getCurrentPrice() <= 0) {
+                throw new ValidationException(
+                    'currentPrice',
+                    ValidationException::GREATER_THAN,
+                    $announcement->getCurrentPrice(),
+                    'Preço atual deve ser mais que ZERO.'
+                );
+            }
+
+            $this->announcementRepository->save($announcement);
+
+            return Base\Response::create($announcement->toArray(), HttpStatusCode::OK());
+
+        } catch (ValidationException $exception) {
+
+            throw $exception;
+
+        } catch (\Throwable $throwable) {
+
+            throw new ApiResponseException($throwable->getMessage(), HttpStatusCode::BAD_REQUEST());
+        }
+    }
+
+    /**
+     * Prepara os dados do body para poder ser construído.
+     * Completa os dados do body com informações para poder criar um anúncio.
+     *
+     * @param $body
+     *
+     * @return array
+     */
+    private function prepareBuildToSave($body)
+    {
+        $body['status'] = Enum\Announcement\Status::ACTIVE;
+        $body['impulses'][] = [
+            'owner' => $body['creator'],
+            'origin' => null
+        ];
+
+        return $body;
     }
 }

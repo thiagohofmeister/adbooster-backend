@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "creator": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "name": { "type": "string" },
+        "image": { "type": "string" }
+      }
+    },
+    "previousPrice": { "type": "number" },
+    "currentPrice": { "type": "number" },
+    "impulsePayoutLimit": { "type": "number" },
+    "stock": { "type": "integer", "minimum": 1 },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["title", "description", "creator", "previousPrice", "currentPrice", "impulsePayoutLimit", "stock", "images"]
+}
