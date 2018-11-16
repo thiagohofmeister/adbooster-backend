@@ -74,6 +74,16 @@ abstract class AbstractRepository
     }
 
     /**
+     * Deleta a entidade no banco.
+     *
+     * @param Entity\EntityAbstract $entity
+     */
+    public function delete($entity)
+    {
+        $this->collection->deleteOne(['_id' => $entity->getId()]);
+    }
+
+    /**
      * Formata dados da entidade para estrutura do Banco de dados.
      *
      * @param Entity\EntityAbstract $entity

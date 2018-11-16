@@ -58,6 +58,32 @@ class Friendship extends Contract
     }
 
     /**
+     * Recusa uma solicitação de amizade.
+     *
+     * @param string $loggedUserCode
+     * @param string $inviteUserCode
+     *
+     * @return Base\Response
+     *
+     * @throws \Exception
+     */
+    public function decline(string $loggedUserCode, string $inviteUserCode): Base\Response
+    {
+        try {
+
+            $friendship = $this->friendshipRepository->getFriendshipByUsers($loggedUserCode, $inviteUserCode);
+
+            $this->friendshipRepository->delete($friendship);
+
+        } catch (DataNotFoundException $dataNotFoundException) {
+
+            throw new \Exception('Pedido de amizade não encontrado', HttpStatusCode::NOT_FOUND);
+        }
+
+        return Base\Response::create(['message' => 'Pedido de amizade recusado com sucesso.'], HttpStatusCode::OK());
+    }
+
+    /**
      * Aceita uma solicitação de amizade.
      *
      * @return Base\Response
