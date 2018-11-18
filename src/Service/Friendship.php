@@ -41,7 +41,7 @@ class Friendship extends Contract
     {
         try {
 
-            $friendship = $this->friendshipRepository->getFriendshipByUsers($loggedUserCode, $inviteUserCode);
+            $friendship = $this->friendshipRepository->getInvitePendingByUsers($loggedUserCode, $inviteUserCode);
 
             $friendship
                 ->setConfirmed(true)
@@ -71,7 +71,7 @@ class Friendship extends Contract
     {
         try {
 
-            $friendship = $this->friendshipRepository->getFriendshipByUsers($loggedUserCode, $inviteUserCode);
+            $friendship = $this->friendshipRepository->getInvitePendingByUsers($loggedUserCode, $inviteUserCode);
 
             $this->friendshipRepository->delete($friendship);
 
@@ -84,7 +84,33 @@ class Friendship extends Contract
     }
 
     /**
-     * Aceita uma solicitação de amizade.
+     * Remove uma amizade.
+     *
+     * @param string $loggedUserCode
+     * @param string $inviteUserCode
+     *
+     * @return Base\Response
+     *
+     * @throws \Exception
+     */
+    public function remove(string $loggedUserCode, string $inviteUserCode): Base\Response
+    {
+        try {
+
+            $friendship = $this->friendshipRepository->getInviteByUsers($loggedUserCode, $inviteUserCode);
+
+            $this->friendshipRepository->delete($friendship);
+
+        } catch (DataNotFoundException $dataNotFoundException) {
+
+            throw new \Exception('Pedido de amizade não encontrado', HttpStatusCode::NOT_FOUND);
+        }
+
+        return Base\Response::create(['message' => 'Amizade removida com sucesso.'], HttpStatusCode::OK());
+    }
+
+    /**
+     * Adiciona um novo amigo.
      *
      * @return Base\Response
      *
@@ -98,7 +124,7 @@ class Friendship extends Contract
 
         try {
 
-            $this->friendshipRepository->getFriendshipByUsers($friendship->getUserAdd(), $friendship->getUserAdded());
+            $this->friendshipRepository->getInviteByUsers($friendship->getUserAdded(), $friendship->getUserAdd());
 
             throw new \Exception("Pedido de amizade já cadastrado.", HttpStatusCode::BAD_REQUEST);
 

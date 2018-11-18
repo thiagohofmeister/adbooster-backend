@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Exception\Repository\DataNotFoundException;
 use App\Service\Base\Service\Contract;
 use App\Service\Base;
 use THS\Utils\Enum\HttpStatusCode;
@@ -24,6 +25,12 @@ class User extends Contract
      * @Inject
      */
     private $friendshipRepository;
+
+    /**
+     * @var \App\Model\Entity\User
+     * @Inject
+     */
+    private $userLogged;
 
     /**
      * Retorna lista de usuários.
@@ -61,7 +68,23 @@ class User extends Contract
         $formattedUsers = [];
         foreach ($users as $user) {
 
-            $formattedUsers[] = $user->toArray();
+            $formattedUser = $user->toArray();
+
+            try {
+
+                $friendship = $this->friendshipRepository->getInviteByUsers($this->userLogged->getId(), $user->getId());
+
+                $formattedUser['statusAdd'] = 'pending';
+                if ($friendship->isConfirmed()) {
+
+                    $formattedUser['statusAdd'] = 'confirmed';
+                }
+
+            } catch (DataNotFoundException $dataNotFoundException) {
+                // previne fatal error
+            }
+
+            $formattedUsers[] = $formattedUser;
         }
 
         return Base\Response::create([

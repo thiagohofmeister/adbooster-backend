@@ -79,12 +79,41 @@ class Friendship extends AbstractRepository
      *
      * @throws DataNotFoundException
      */
-    public function getFriendshipByUsers(string $loggedUserCode, string $inviteUserCode): Entity\Friendship
+    public function getInvitePendingByUsers(string $loggedUserCode, string $inviteUserCode): Entity\Friendship
     {
         return $this->findOne([
             'userAdded' => $loggedUserCode,
             'userAdd' => $inviteUserCode,
             'confirmed' => false
+        ]);
+    }
+
+    /**
+     * Retorna uma amizade pelos usuários.
+     *
+     * @param string $loggedUserCode
+     * @param string $inviteUserCode
+     *
+     * @return Entity\Friendship
+     *
+     * @throws DataNotFoundException
+     */
+    public function getInviteByUsers(string $loggedUserCode, string $inviteUserCode): Entity\Friendship
+    {
+        return $this->findOne([
+            'userAdded' => [
+                '$in' => [
+                    $loggedUserCode,
+                    $inviteUserCode,
+                ]
+            ]
+            ,
+            'userAdd' => [
+                '$in' => [
+                    $loggedUserCode,
+                    $inviteUserCode,
+                ]
+            ]
         ]);
     }
 

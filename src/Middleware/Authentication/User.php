@@ -54,6 +54,8 @@ class User extends MiddlewareAbstract
 
             $this->userRepository->extendsExpiration($user);
 
+            $this->container->set(Entity\User::class, $user);
+
         } catch (\Throwable $throwable) {
 
             return $response
