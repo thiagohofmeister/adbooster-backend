@@ -23,7 +23,7 @@ return [
             return 'http://localhost:3001/image/';
         }
 
-        return 'https://www.adbooster.com.br/image/';
+        return 'https://backend.adbooster.com.br/image/';
     },
 
     'settings.displayErrorDetails' => true,
