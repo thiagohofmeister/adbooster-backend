@@ -2,8 +2,6 @@
 
 namespace App\Model\Element;
 
-use App\Model\Element;
-
 /**
  * Elemento de impulso.
  *
@@ -11,18 +9,18 @@ use App\Model\Element;
  */
 class Impulse extends ElementAbstract
 {
-    /** @var Element\User\Creator Usuário que fez o impulso. */
+    /** @var string Usuário que fez o impulso. */
     private $owner;
 
-    /** @var Element\User\Creator Usuário que fez o impulso anterior. */
+    /** @var string Usuário que fez o impulso anterior. */
     private $origin;
 
     /**
      * Retorna a propriedade {@see Impulse::$owner}.
      *
-     * @return User\Creator
+     * @return string
      */
-    public function getOwner(): User\Creator
+    public function getOwner(): ?string
     {
         return $this->owner;
     }
@@ -30,11 +28,11 @@ class Impulse extends ElementAbstract
     /**
      * Define a propriedade {@see Impulse::$owner}.
      *
-     * @param User\Creator $owner
+     * @param string $owner
      *
      * @return static|Impulse
      */
-    public function setOwner(User\Creator $owner)
+    public function setOwner(?string $owner)
     {
         $this->owner = $owner;
         return $this;
@@ -43,9 +41,9 @@ class Impulse extends ElementAbstract
     /**
      * Retorna a propriedade {@see Impulse::$origin}.
      *
-     * @return User\Creator
+     * @return string
      */
-    public function getOrigin(): ?User\Creator
+    public function getOrigin(): ?string
     {
         return $this->origin;
     }
@@ -53,11 +51,11 @@ class Impulse extends ElementAbstract
     /**
      * Define a propriedade {@see Impulse::$origin}.
      *
-     * @param User\Creator $origin
+     * @param string $origin
      *
      * @return static|Impulse
      */
-    public function setOrigin(?User\Creator $origin)
+    public function setOrigin(?string $origin)
     {
         $this->origin = $origin;
         return $this;
@@ -69,8 +67,8 @@ class Impulse extends ElementAbstract
     public function toArray(): array
     {
         return [
-            'owner' => $this->getOwner()->toArray(),
-            'origin' => !empty($this->getOrigin()) ? $this->getOrigin()->toArray() : null,
+            'owner' => $this->getOwner(),
+            'origin' => $this->getOrigin(),
         ];
     }
 
@@ -80,7 +78,7 @@ class Impulse extends ElementAbstract
     public static function fromArray(array $array)
     {
         return (new static)
-            ->setOwner(Element\User\Creator::fromArray((array) $array['owner']))
-            ->setOrigin(!empty((array) $array['origin']) ? Element\User\Creator::fromArray((array) $array['origin']) : null);
+            ->setOwner($array['owner'])
+            ->setOrigin($array['origin']);
     }
 }

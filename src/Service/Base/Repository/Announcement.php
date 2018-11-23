@@ -38,8 +38,8 @@ class Announcement extends AbstractRepository
         $query[] = [
             '$match' => [
                 '$or' => [
-                    ['impulses.owner.code' => $userCode],
-                    ['impulses.owner.code' => ['$in' => $friends]]
+                    ['impulses.owner' => $userCode],
+                    ['impulses.owner' => ['$in' => $friends]]
                 ]
             ]
         ];

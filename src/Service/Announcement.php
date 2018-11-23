@@ -31,6 +31,12 @@ class Announcement extends Contract
     private $friendshipRepository;
 
     /**
+     * @var Base\Repository\User
+     * @Inject
+     */
+    private $userRepository;
+
+    /**
      * Retorna os anúncios.
      *
      * @return Base\Response
@@ -51,8 +57,15 @@ class Announcement extends Contract
             $friendships = $this->friendshipRepository->getByUserCode($userCode);
 
             $friends = [];
-            foreach ($friendships as $friend) {
-                $friends[] = $friend->getUserAdded();
+            foreach ($friendships as $friendship) {
+
+                $friend = $friendship->getUserAdded();
+                if ($userCode === $friend) {
+
+                    $friend = $friendship->getUserAdd();
+                }
+
+                $friends[] = $friend;
             }
 
             $announcements = $this->announcementRepository
@@ -70,13 +83,13 @@ class Announcement extends Contract
         $formattedAnnouncements = [];
         foreach ($announcements as $announcement) {
 
-            $sharedBy = reset($announcement->getImpulses())->toArray()['owner'];
+            $userCode = reset($announcement->getImpulses())->toArray()['owner'];
 
             $this->announcementRepository->fillImpulses($announcement);
 
             $announcementFormatted = $announcement->toArray();
 
-            $announcementFormatted['sharedBy'] = $sharedBy;
+            $announcementFormatted['sharedBy'] = $this->userRepository->getById($userCode)->toArray();
 
             $formattedAnnouncements[] = $announcementFormatted;
         }
