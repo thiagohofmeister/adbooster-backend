@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\Controller;
+use App\Exception\Repository\DataNotFoundException;
 use App\Service\Base\Repository;
 use THS\Utils\Enum\HttpStatusCode;
 use App\Model\Element;
@@ -55,7 +56,9 @@ class Authenticate extends Controller
 
             $this->userRepository->save($user);
 
-            return $this->renderResponse($this->userRepository->getByEmail($user->getEmail())->toArray(), HttpStatusCode::OK());
+            $userFormatted = $this->userRepository->getByEmail($user->getEmail());
+
+            return $this->renderResponse($this->formatUser($userFormatted), HttpStatusCode::OK());
 
         } catch (\Throwable $throwable) {
 
@@ -79,15 +82,12 @@ class Authenticate extends Controller
         try {
             $user = $this->userRepository->getByToken($token);
 
-            $userFormatted = $user->toArray();
-            $userFormatted['friends'] = (int) count($this->friendshipRepository->getByUserCode($user->getId(), true));
+            return $this->renderResponse($this->formatUser($user), HttpStatusCode::OK());
 
         } catch (\Throwable $throwable) {
 
             return $this->renderResponse([], HttpStatusCode::NOT_FOUND());
         }
-
-        return $this->renderResponse($userFormatted, HttpStatusCode::OK());
     }
 
     /**
@@ -121,5 +121,22 @@ class Authenticate extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * Retorna um array do usuário para retornar na Api.
+     *
+     * @param Entity\User $user
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    private function formatUser(Entity\User $user): array
+    {
+        $userFormatted = $user->toArray();
+        $userFormatted['friends'] = (int) count($this->friendshipRepository->getByUserCode($user->getId(), true));
+
+        return $userFormatted;
     }
 }

@@ -68,6 +68,10 @@ class User extends Contract
         $formattedUsers = [];
         foreach ($users as $user) {
 
+            if ((string) $this->userLogged->getId() == (string) $user->getId()) {
+                continue;
+            }
+
             $formattedUser = $user->toArray();
 
             try {
