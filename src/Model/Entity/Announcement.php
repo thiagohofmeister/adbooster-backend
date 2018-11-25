@@ -49,6 +49,9 @@ class Announcement extends EntityAbstract
     /** @var Element\Impulse[] */
     private $impulses;
 
+    /** @var Enum\Announcement\Type */
+    private $type;
+
     /**
      * Retorna a propriedade {@see Announcement::$title}.
      *
@@ -326,6 +329,29 @@ class Announcement extends EntityAbstract
     }
 
     /**
+     * Retorna a propriedade {@see Announcement::$type}.
+     *
+     * @return Enum\Announcement\Type
+     */
+    public function getType(): Enum\Announcement\Type
+    {
+        return $this->type;
+    }
+
+    /**
+     * Define a propriedade {@see Announcement::$type}.
+     *
+     * @param Enum\Announcement\Type $type
+     *
+     * @return static|Announcement
+     */
+    public function setType(Enum\Announcement\Type $type)
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toArray(): array
@@ -348,6 +374,7 @@ class Announcement extends EntityAbstract
             'updated' => $this->getUpdated()->format(Date::JAVASCRIPT_ISO_FORMAT),
             'status' => $this->getStatus()->value(),
             'impulses' => $impulses,
+            'type' => $this->getType()->value()
         ];
 
         if (!empty($this->getId())) {
@@ -379,6 +406,7 @@ class Announcement extends EntityAbstract
             ->setCreated(new \DateTime($array['created']))
             ->setUpdated(new \DateTime($array['updated']))
             ->setStatus(Enum\Announcement\Status::memberByValue($array['status']))
-            ->setImpulses($impulses);
+            ->setImpulses($impulses)
+            ->setType(Enum\Announcement\Type::memberByValue($array['type']));
     }
 }
