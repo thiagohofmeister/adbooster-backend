@@ -112,6 +112,83 @@ class Announcement extends AbstractRepository
     }
 
     /**
+     * Retorna os anúncios a partir de um usuário e seus amigos.
+     *
+     * @param string $search
+     * @param array $userCodes
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    public function getBySearchAndUsers(string $search, $userCodes = [])
+    {
+        $query = [];
+
+        $query[] = [
+            '$unwind' => [
+                'path' => '$impulses'
+            ]
+        ];
+
+        $query[] = [
+            '$match' => [
+                'impulses.owner' => ['$in' => $userCodes]
+            ]
+        ];
+
+        $query[] = [
+            '$match' => [
+                '$or' => [
+                    ['title' => ['$regex' => $search, '$options' => 'gi']],
+                    ['description' => ['$regex' => $search, '$options' => 'gi']],
+                ],
+            ]
+        ];
+
+        $query[] = [
+            '$sort' => [
+                'updated' => -1
+            ]
+        ];
+
+        if ($this->isPaginated()) {
+
+            $queryCount = array_merge($query, [
+                [
+                    '$count' => 'total'
+                ]
+            ]);
+
+            $this->setPaginationTotal(reset($this->collection->aggregate($queryCount)->toArray())['total']);
+        }
+
+        if (!empty($this->getOffset())) {
+            $query[] = [
+                '$skip' => $this->getOffset()
+            ];
+        }
+
+        if (!empty($this->getLimit())) {
+            $query[] = [
+                '$limit' => $this->getLimit()
+            ];
+        }
+
+        $documents = $this->collection->aggregate($query);
+
+        $announcements = [];
+        foreach ($documents as $document) {
+
+            $document['impulses'] = [$document['impulses']];
+
+            $announcements[] = $this->fromDocument($document);
+        }
+
+        return $announcements;
+    }
+
+    /**
      * Preenche os impulsos do anúncio.
      *
      * @param Entity\Announcement $announcement
@@ -147,6 +224,12 @@ class Announcement extends AbstractRepository
         $document['updated'] = $document['updated']->toDateTime()
             ->format(Date::JAVASCRIPT_ISO_FORMAT);
 
+        foreach ($document['impulses'] as &$impulse) {
+
+            $impulse['created'] = $impulse['created']->toDateTime()
+                ->format(Date::JAVASCRIPT_ISO_FORMAT);
+        }
+
         return Entity\Announcement::fromArray((array) $document);
     }
 
@@ -161,6 +244,11 @@ class Announcement extends AbstractRepository
 
         $array['created'] = new UTCDateTime($friendship->getCreated());
         $array['updated'] = new UTCDateTime($friendship->getUpdated());
+
+        foreach ($array['impulses'] as &$impulse) {
+
+            $impulse['created'] = new UTCDateTime(new \DateTime($impulse['created']));
+        }
 
         return $array;
     }

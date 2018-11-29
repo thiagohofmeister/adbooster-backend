@@ -21,7 +21,8 @@
         "type": "string"
       },
       "minItems": 1
-    }
+    },
+    "type": { "enum": ["bronze"] }
   },
-  "required": ["title", "description", "creator", "previousPrice", "currentPrice", "impulsePayoutLimit", "stock", "images"]
+  "required": ["title", "description", "creator", "previousPrice", "currentPrice", "impulsePayoutLimit", "stock", "images", "type"]
 }

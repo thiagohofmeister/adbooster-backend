@@ -2,6 +2,8 @@
 
 namespace App\Model\Element;
 
+use THS\Utils\Date;
+
 /**
  * Elemento de impulso.
  *
@@ -14,6 +16,9 @@ class Impulse extends ElementAbstract
 
     /** @var string Usuário que fez o impulso anterior. */
     private $origin;
+
+    /** @var \DateTime Data do impulso. */
+    private $created;
 
     /**
      * Retorna a propriedade {@see Impulse::$owner}.
@@ -62,6 +67,29 @@ class Impulse extends ElementAbstract
     }
 
     /**
+     * Retorna a propriedade {@see Impulse::$created}.
+     *
+     * @return \DateTime
+     */
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    /**
+     * Define a propriedade {@see Impulse::$created}.
+     *
+     * @param \DateTime $created
+     *
+     * @return static|Impulse
+     */
+    public function setCreated(\DateTime $created)
+    {
+        $this->created = $created;
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toArray(): array
@@ -69,6 +97,7 @@ class Impulse extends ElementAbstract
         return [
             'owner' => $this->getOwner(),
             'origin' => $this->getOrigin(),
+            'created' => $this->getCreated()->format(Date::JAVASCRIPT_ISO_FORMAT),
         ];
     }
 
@@ -79,6 +108,7 @@ class Impulse extends ElementAbstract
     {
         return (new static)
             ->setOwner($array['owner'])
-            ->setOrigin($array['origin']);
+            ->setOrigin($array['origin'])
+            ->setCreated(new \DateTime($array['created']));
     }
 }

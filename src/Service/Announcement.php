@@ -8,6 +8,8 @@ use App\Exception\ValidationException;
 use App\Model\Element;
 use App\Service\Base\Service\Contract;
 use App\Service\Base;
+use MongoDB\BSON\UTCDateTime;
+use THS\Utils\Date;
 use THS\Utils\Enum\HttpStatusCode;
 use App\Model\Entity;
 use App\Enum;
@@ -84,13 +86,14 @@ class Announcement extends Contract
         $formattedAnnouncements = [];
         foreach ($announcements as $announcement) {
 
-            $userCode = reset($announcement->getImpulses())->toArray()['owner'];
+            $impulse = reset($announcement->getImpulses());
 
             $this->announcementRepository->fillImpulses($announcement);
 
             $announcementFormatted = $announcement->toArray();
 
-            $announcementFormatted['sharedBy'] = $this->userRepository->getById($userCode)->toArray();
+            $announcementFormatted['sharedBy'] = $this->userRepository->getById($impulse->getOwner())->toArray();
+            $announcementFormatted['impulseDate'] = $impulse->getCreated()->format(Date::JAVASCRIPT_ISO_FORMAT);
 
             $formattedAnnouncements[] = $announcementFormatted;
         }
@@ -154,10 +157,12 @@ class Announcement extends Contract
 
             $body = $this->prepareBuildToSave($this->getRequest()->getParsedBody());
 
-            $impulse = Element\Impulse::fromArray($body['impulse']);
+            $impulse = Element\Impulse::fromArray($body['impulse'])->toArray();
+
+            $impulse['created'] = new UTCDateTime(new \DateTime($impulse['created']));
 
             $this->announcementRepository->push($body['announcementId'], [
-                'impulses' => $impulse->toArray()
+                'impulses' => $impulse
             ]);
 
             $announcement = $this->announcementRepository->getById($body['announcementId']);
@@ -188,10 +193,12 @@ class Announcement extends Contract
 
             $body = $this->prepareBuildToSave($this->getRequest()->getParsedBody());
 
-            $impulse = Element\Impulse::fromArray($body['impulse']);
+            $impulse = Element\Impulse::fromArray($body['impulse'])->toArray();
+
+            unset($impulse['created']);
 
             $this->announcementRepository->pull($body['announcementId'], [
-                'impulses' => $impulse->toArray()
+                'impulses' => $impulse
             ]);
 
             $announcement = $this->announcementRepository->getById($body['announcementId']);
@@ -220,7 +227,7 @@ class Announcement extends Contract
     {
         $body['status'] = Enum\Announcement\Status::ACTIVE;
         $body['impulses'][] = [
-            'owner' => $body['creator'],
+            'owner' => $body['creator']['code'],
             'origin' => null
         ];
 
