@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "properties": {
+    "announcementId": { "type": "string" },
+    "impulse": {
+      "type": "object",
+      "properties": {
+        "owner": { "type": "string" },
+        "origin": { "type": "string" }
+      }
+    }
+  },
+  "required": ["announcementId", "impulse"]
+}

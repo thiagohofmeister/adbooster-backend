@@ -74,6 +74,32 @@ abstract class AbstractRepository
     }
 
     /**
+     * Atualiza um registro no banco com push.
+     *
+     * @param string $id
+     * @param array $data
+     */
+    public function push(string $id, array $data)
+    {
+        $this->collection->updateOne(['_id' => new ObjectId($id)], [
+            '$push' => $data
+        ]);
+    }
+
+    /**
+     * Atualiza um registro no banco com pull.
+     *
+     * @param string $id
+     * @param array $data
+     */
+    public function pull(string $id, array $data)
+    {
+        $this->collection->updateOne(['_id' => new ObjectId($id)], [
+            '$pull' => $data
+        ]);
+    }
+
+    /**
      * Deleta a entidade no banco.
      *
      * @param Entity\EntityAbstract $entity

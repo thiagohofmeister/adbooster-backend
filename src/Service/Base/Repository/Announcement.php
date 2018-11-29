@@ -25,7 +25,32 @@ class Announcement extends AbstractRepository
         parent::__construct($database);
     }
 
-    public function getByUserAndFriends(string $userCode, $friends = []) {
+    /**
+     * Retorna um anúncio pelo id.
+     *
+     * @param string $code
+     *
+     * @return Entity\Announcement
+     *
+     * @throws DataNotFoundException
+     */
+    public function getById(string $code): Entity\Announcement
+    {
+        return $this->findOne(['_id' => new ObjectId($code)]);
+    }
+
+    /**
+     * Retorna os anúncios a partir de um usuário e seus amigos.
+     *
+     * @param string $userCode
+     * @param array $friends
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    public function getByUserAndFriends(string $userCode, $friends = [])
+    {
 
         $query = [];
 
@@ -95,7 +120,8 @@ class Announcement extends AbstractRepository
      *
      * @throws DataNotFoundException
      */
-    public function fillImpulses(Entity\Announcement $announcement) {
+    public function fillImpulses(Entity\Announcement $announcement)
+    {
 
         $document = $this->findOne(['_id' => $announcement->getId()]);
 

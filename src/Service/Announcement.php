@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Exception\ApiResponseException;
 use App\Exception\Repository\DataNotFoundException;
 use App\Exception\ValidationException;
+use App\Model\Element;
 use App\Service\Base\Service\Contract;
 use App\Service\Base;
 use THS\Utils\Enum\HttpStatusCode;
@@ -126,6 +127,74 @@ class Announcement extends Contract
             }
 
             $this->announcementRepository->save($announcement);
+
+            return Base\Response::create($announcement->toArray(), HttpStatusCode::OK());
+
+        } catch (ValidationException $exception) {
+
+            throw $exception;
+
+        } catch (\Throwable $throwable) {
+
+            throw new ApiResponseException($throwable->getMessage(), HttpStatusCode::BAD_REQUEST());
+        }
+    }
+
+    /**
+     * Cadastra/Remove um impulso de um anúncio.
+     *
+     * @return Base\Response
+     *
+     * @throws ApiResponseException
+     * @throws ValidationException
+     */
+    public function addImpulse()
+    {
+        try {
+
+            $body = $this->prepareBuildToSave($this->getRequest()->getParsedBody());
+
+            $impulse = Element\Impulse::fromArray($body['impulse']);
+
+            $this->announcementRepository->push($body['announcementId'], [
+                'impulses' => $impulse->toArray()
+            ]);
+
+            $announcement = $this->announcementRepository->getById($body['announcementId']);
+
+            return Base\Response::create($announcement->toArray(), HttpStatusCode::OK());
+
+        } catch (ValidationException $exception) {
+
+            throw $exception;
+
+        } catch (\Throwable $throwable) {
+
+            throw new ApiResponseException($throwable->getMessage(), HttpStatusCode::BAD_REQUEST());
+        }
+    }
+
+    /**
+     * Cadastra/Remove um impulso de um anúncio.
+     *
+     * @return Base\Response
+     *
+     * @throws ApiResponseException
+     * @throws ValidationException
+     */
+    public function removeImpulse()
+    {
+        try {
+
+            $body = $this->prepareBuildToSave($this->getRequest()->getParsedBody());
+
+            $impulse = Element\Impulse::fromArray($body['impulse']);
+
+            $this->announcementRepository->pull($body['announcementId'], [
+                'impulses' => $impulse->toArray()
+            ]);
+
+            $announcement = $this->announcementRepository->getById($body['announcementId']);
 
             return Base\Response::create($announcement->toArray(), HttpStatusCode::OK());
 
