@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Exception\Repository\DataNotFoundException;
 use App\Service\Base\Service\Contract;
+use THS\Utils\Date;
 use THS\Utils\Enum\HttpStatusCode;
 
 /**
@@ -102,7 +103,7 @@ class Search extends Contract
 
             $friendships = $this->friendshipRepository->getByUserCode($userCode);
 
-            $userCodes = [$userCode];
+            $friends = [];
             foreach ($friendships as $friendship) {
 
                 $friend = $friendship->getUserAdded();
@@ -111,32 +112,32 @@ class Search extends Contract
                     $friend = $friendship->getUserAdd();
                 }
 
-                $userCodes[] = $friend;
+                $friends[] = $friend;
             }
 
             $announcements = $this->announcementRepository
                 ->setPaginated($page, $limit)
-                ->getBySearchAndUsers($search, $userCodes);
+                ->getBySearchAndFriends($search, $friends);
 
             $total = $this->announcementRepository->getPaginationTotal();
 
 
         } catch (\Throwable $throwable) {
 
-            ~rt($throwable);
             $announcements = [];
         }
 
         $formattedAnnouncements = [];
         foreach ($announcements as $announcement) {
 
-            $userCode = reset($announcement->getImpulses())->toArray()['owner'];
+            $impulse = reset($announcement->getImpulses());
 
             $this->announcementRepository->fillImpulses($announcement);
 
             $announcementFormatted = $announcement->toArray();
 
-            $announcementFormatted['sharedBy'] = $this->userRepository->getById($userCode)->toArray();
+            $announcementFormatted['sharedBy'] = $this->userRepository->getById($impulse->getOwner())->toArray();
+            $announcementFormatted['impulseDate'] = $impulse->getCreated()->format(Date::JAVASCRIPT_ISO_FORMAT);
 
             $formattedAnnouncements[] = $announcementFormatted;
         }

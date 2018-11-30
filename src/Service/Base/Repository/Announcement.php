@@ -115,13 +115,13 @@ class Announcement extends AbstractRepository
      * Retorna os anúncios a partir de um usuário e seus amigos.
      *
      * @param string $search
-     * @param array $userCodes
+     * @param array $friends
      *
      * @return array
      *
      * @throws \Exception
      */
-    public function getBySearchAndUsers(string $search, $userCodes = [])
+    public function getBySearchAndFriends(string $search, $friends = [])
     {
         $query = [];
 
@@ -133,7 +133,7 @@ class Announcement extends AbstractRepository
 
         $query[] = [
             '$match' => [
-                'impulses.owner' => ['$in' => $userCodes]
+                'impulses.owner' => ['$in' => $friends]
             ]
         ];
 
