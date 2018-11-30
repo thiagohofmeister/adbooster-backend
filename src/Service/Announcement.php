@@ -105,6 +105,44 @@ class Announcement extends Contract
     }
 
     /**
+     * Retorna um anúncio.
+     *
+     * @param string $code
+     * @param string $sharedCode
+     *
+     * @return Base\Response
+     */
+    public function retrieve(string $code, string $sharedCode): Base\Response
+    {
+        try {
+
+            $announcement = $this->announcementRepository
+                ->getById($code);
+
+            $this->announcementRepository->fillImpulses($announcement);
+
+            $announcementFormatted = $announcement->toArray();
+
+            $announcementFormatted['sharedBy'] = $this->userRepository->getById($sharedCode)->toArray();
+
+            foreach ($announcement->getImpulses() as $impulse) {
+
+                if ($impulse->getOwner() === $sharedCode) {
+
+                    $announcementFormatted['impulseDate'] = $impulse->getCreated()->format(Date::JAVASCRIPT_ISO_FORMAT);
+                    break;
+                }
+            }
+
+            return Base\Response::create($announcementFormatted, HttpStatusCode::OK());
+
+        } catch (\Throwable $throwable) {
+
+            return Base\Response::create(['Anúncio não encontrado.'], HttpStatusCode::NOT_FOUND());
+        }
+    }
+
+    /**
      * Publica um anúncio.
      *
      * @return Base\Response
