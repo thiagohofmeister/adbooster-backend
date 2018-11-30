@@ -67,10 +67,6 @@ class Search extends Contract
             $users = [];
         }
 
-        if (empty($users)) {
-            throw new \Exception('Nenhum usuário encontrado.', HttpStatusCode::NOT_FOUND);
-        }
-
         $formattedUsers = [];
         foreach ($users as $user) {
 
@@ -140,6 +136,10 @@ class Search extends Contract
             $announcementFormatted['impulseDate'] = $impulse->getCreated()->format(Date::JAVASCRIPT_ISO_FORMAT);
 
             $formattedAnnouncements[] = $announcementFormatted;
+        }
+
+        if (empty($formattedUsers) && empty($formattedAnnouncements)) {
+            throw new \Exception('Nenhum resultado encontrado.', HttpStatusCode::NOT_FOUND);
         }
 
         return Base\Response::create([
