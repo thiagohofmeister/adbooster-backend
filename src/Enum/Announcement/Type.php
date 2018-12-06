@@ -9,7 +9,7 @@ use THS\Utils\Enum\Label;
  *
  * @method static Type BRONZE()
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Type extends Label
 {

@@ -7,7 +7,7 @@ use App\Model\Element\ElementAbstract;
 /**
  * Elemento de endereço do cliente.
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Address extends ElementAbstract
 {

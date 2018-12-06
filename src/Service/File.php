@@ -10,7 +10,7 @@ use THS\Utils\Enum\HttpStatusCode;
 /**
  * Serviço relacionado aos arquivos.
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class File extends Contract
 {

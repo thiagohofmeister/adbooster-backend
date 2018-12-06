@@ -5,7 +5,7 @@ namespace App\Model\Element\User;
 /**
  * Elemento de usuário criador de anúncio.
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Creator extends Standard
 {

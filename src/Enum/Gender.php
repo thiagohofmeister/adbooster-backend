@@ -11,7 +11,7 @@ use THS\Utils\Enum\Label;
  * @method static Gender FEMALE()
  * @method static Gender OTHER()
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Gender extends Label
 {

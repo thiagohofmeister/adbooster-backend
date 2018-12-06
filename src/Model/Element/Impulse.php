@@ -7,7 +7,7 @@ use THS\Utils\Date;
 /**
  * Elemento de impulso.
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Impulse extends ElementAbstract
 {

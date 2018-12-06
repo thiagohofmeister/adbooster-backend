@@ -11,7 +11,7 @@ use Eloquent\Enumeration\AbstractEnumeration;
  * @method static Status INACTIVE()
  * @method static Status PAUSED()
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Status extends AbstractEnumeration
 {

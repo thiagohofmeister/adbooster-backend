@@ -9,7 +9,7 @@ use THS\Utils\Date;
 /**
  * Modelagem do anúncio.
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Announcement extends EntityAbstract
 {

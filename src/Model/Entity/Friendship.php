@@ -8,7 +8,7 @@ use THS\Utils\Date;
 /**
  * Modelagem de amizade.
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Friendship extends EntityAbstract
 {

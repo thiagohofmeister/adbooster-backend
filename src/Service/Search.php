@@ -10,7 +10,7 @@ use THS\Utils\Enum\HttpStatusCode;
 /**
  * @todo Document class Search.
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Search extends Contract
 {

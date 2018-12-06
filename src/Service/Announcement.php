@@ -17,7 +17,7 @@ use App\Enum;
 /**
  * Serviço relacionado aos anúncios.
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Announcement extends Contract
 {

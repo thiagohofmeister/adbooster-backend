@@ -12,7 +12,7 @@ use App\Model\Entity;
 /**
  * Serviço relacionado as amizades.
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Friendship extends Contract
 {

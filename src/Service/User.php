@@ -10,7 +10,7 @@ use THS\Utils\Enum\HttpStatusCode;
 /**
  * Serviço relacionado aos usuários.
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class User extends Contract
 {

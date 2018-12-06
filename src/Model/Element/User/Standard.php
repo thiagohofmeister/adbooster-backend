@@ -7,7 +7,7 @@ use App\Model\Element\ElementAbstract;
 /**
  * Elemento de usuário padrão.
  *
- * @author Thiago Hofmeister <thiago.souza@moovin.com.br>
+ * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
 class Standard extends ElementAbstract
 {
