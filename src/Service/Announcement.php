@@ -86,7 +86,7 @@ class Announcement extends Contract
         $formattedAnnouncements = [];
         foreach ($announcements as $announcement) {
 
-            if ($announcement->getStatus()->value() === Enum\Announcement\Status::PAUSED) {
+            if ($announcement->getStatus()->value() !== Enum\Announcement\Status::ACTIVE) {
                 continue;
             }
 
