@@ -36,19 +36,18 @@ class Order extends Contract
 
             $body = $this->prepareBuildToSave($this->getRequest()->getParsedBody());
 
-            $order = \App\Model\Entity\Order::fromArray($body);
+            $order = Entity\Order::fromArray($body);
 
-            $commissions = [];
             foreach ($order->getItems() as $item) {
 
                 $announcement = $this->announcementRepository->getById($item->getCode());
 
-                $commissions += $this->getComissionsRecursive($announcement->getImpulses(), $item->getSeller());
+                $commissions = $this->getComissionsRecursive($announcement->getImpulses(), $item->getSeller());
 
-                ~rt($commissions);
+                $item->setComissions($commissions);
             }
 
-            ~rt($order);
+            ~rt($order->toArray());
 
             return Base\Response::create($order->toArray(), HttpStatusCode::OK());
 
@@ -87,11 +86,6 @@ class Order extends Contract
         return $body;
     }
 
-    private function getComissions($impulses, string $seller)
-    {
-        return $this->getComissionsRecursive($impulses, $seller);
-    }
-
     /**
      * @param Element\Impulse[] $impulses
      * @param string $userCode
@@ -108,7 +102,7 @@ class Order extends Contract
                 if (!empty($impulse->getOrigin())) {
                     $comissions[] = $impulse->getOwner();
 
-                    return $this->getComissionsRecursive($impulses, $impulse->getOrigin());
+                    $comissions = array_merge($comissions, $this->getComissionsRecursive($impulses, $impulse->getOrigin()));
                 }
             }
         }
