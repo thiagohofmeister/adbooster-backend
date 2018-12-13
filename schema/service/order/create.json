@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "string" },
+          "previousPrice": { "type": "number" },
+          "currentPrice": { "type": "number" },
+          "quantity": { "type": "integer" },
+          "seller": { "type": "string" },
+          "impulsePrice": { "type": "number" }
+        },
+        "required": ["code", "previousPrice", "currentPrice", "quantity", "seller", "impulsePrice"]
+      }
+    },
+    "billingAddress": {
+      "type": "object",
+      "properties": {
+        "state": { "type": "string" },
+        "city": { "type": "string" },
+        "district": { "type": "string" },
+        "street": { "type": "string" },
+        "number": { "type": "number" },
+        "reference": { "type": "string" },
+        "zipCode": { "type": "string" },
+        "complement": { "type": "string" }
+      },
+      "required": ["state", "city", "district", "street", "number", "zipCode"]
+    },
+    "shippingAddress": {
+      "type": "object",
+      "properties": {
+        "state": { "type": "string" },
+        "city": { "type": "string" },
+        "district": { "type": "string" },
+        "street": { "type": "string" },
+        "number": { "type": "number" },
+        "reference": { "type": "string" },
+        "zipCode": { "type": "string" },
+        "complement": { "type": "string" }
+      },
+      "required": ["state", "city", "district", "street", "number", "zipCode"]
+    },
+    "customer": { "type": "string" }
+  },
+  "required": ["items", "billingAddress", "shippingAddress", "customer"]
+}

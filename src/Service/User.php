@@ -2,9 +2,13 @@
 
 namespace App\Service;
 
+use App\Exception\ApiResponseException;
 use App\Exception\Repository\DataNotFoundException;
+use App\Exception\ValidationException;
+use App\Model\Element;
 use App\Service\Base\Service\Contract;
 use App\Service\Base;
+use http\Exception;
 use THS\Utils\Enum\HttpStatusCode;
 
 /**
@@ -120,6 +124,49 @@ class User extends Contract
         return Base\Response::create($userFormatted, HttpStatusCode::OK());
     }
 
+    /**
+     * Adiciona um novo endereço de entrega.
+     *
+     * @return Base\Response
+     *
+     * @throws ApiResponseException
+     * @throws ValidationException
+     */
+    public function addShippingAddress(): Base\Response
+    {
+        try {
+            $body = $this->getRequest()->getParsedBody();
+
+            $shippingAddress = Element\User\Address::fromArray($body);
+
+            $user = $this->userRepository->getByIdAndShippingZipCode((string) $this->userLogged->getId(), $shippingAddress->getZipCode());
+
+            if (!empty($user)) {
+                throw new ApiResponseException('Endereço já cadastrado.', HttpStatusCode::UNPROCESSABLE_ENTITY());
+            }
+
+        } catch (DataNotFoundException $dataNotFoundException) {
+            // previne fatal error
+        }
+
+        try {
+
+            $shippingAddresses = $this->userLogged->getShippingAddresses();
+            $shippingAddresses[] = $shippingAddress;
+
+            $this->userRepository->save($this->userLogged->setShippingAddresses($shippingAddresses));
+
+            return Base\Response::create($this->userLogged->toArray(), HttpStatusCode::OK());
+
+        } catch (ValidationException $exception) {
+
+            throw $exception;
+
+        } catch (\Throwable $throwable) {
+
+            throw new ApiResponseException($throwable->getMessage(), HttpStatusCode::BAD_REQUEST());
+        }
+    }
 
     public function index()
     {

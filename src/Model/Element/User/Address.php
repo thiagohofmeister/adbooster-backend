@@ -201,7 +201,7 @@ class Address extends ElementAbstract
      *
      * @return string
      */
-    public function getComplement(): string
+    public function getComplement(): ?string
     {
         return $this->complement;
     }
@@ -213,7 +213,7 @@ class Address extends ElementAbstract
      *
      * @return static|Address
      */
-    public function setComplement(string $complement)
+    public function setComplement(?string $complement)
     {
         $this->complement = $complement;
         return $this;

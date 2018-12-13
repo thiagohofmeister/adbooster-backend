@@ -139,13 +139,13 @@ class Friendship extends AbstractRepository
     /**
      * @inheritDoc
      *
-     * @param Entity\Friendship $friendship
+     * @param Entity\Friendship $entity
      */
-    protected function toDocument($friendship)
+    protected function toDocument($entity)
     {
-        $array = $friendship->toArray();
+        $array = $entity->toArray();
 
-        $array['start'] = new UTCDateTime($friendship->getStart());
+        $array['start'] = new UTCDateTime($entity->getStart());
 
         return $array;
     }

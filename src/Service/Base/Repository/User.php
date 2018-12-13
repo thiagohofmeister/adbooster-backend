@@ -52,6 +52,33 @@ class User extends AbstractRepository
     }
 
     /**
+     * Busca um usuário pelo cep de um endereço de entrega.
+     *
+     * @param string $userCode
+     * @param string $zipCode
+     *
+     * @return Entity\User
+     *
+     * @throws DataNotFoundException
+     */
+    public function getByIdAndShippingZipCode(string $userCode, string $zipCode): Entity\User
+    {
+        $user = $this->findOne(['_id' => new ObjectId($userCode), 'shippingAddresses.zipCode' => $zipCode]);
+
+        if (empty($user)) {
+
+            throw new DataNotFoundException(
+                [
+                    'shippingAddresses.zipCode' => $zipCode,
+                ],
+                'Usuário não encontrado'
+            );
+        }
+
+        return $user;
+    }
+
+    /**
      * Retorna uma lista de usuários pela busca.
      *
      * @param string $search
@@ -211,16 +238,16 @@ class User extends AbstractRepository
     /**
      * @inheritDoc
      *
-     * @param Entity\User $friendship
+     * @param Entity\User $entity
      */
-    protected function toDocument($friendship)
+    protected function toDocument($entity)
     {
-        $array = $friendship->toArray();
+        $array = $entity->toArray();
 
-        $array['date'] = new UTCDateTime($friendship->getDate());
+        $array['date'] = new UTCDateTime($entity->getDate());
 
         if (!empty($array['authentication'])) {
-            $array['authentication']['expires'] = new UTCDateTime($friendship->getAuthentication()->getExpires());
+            $array['authentication']['expires'] = new UTCDateTime($entity->getAuthentication()->getExpires());
         }
 
         return $array;

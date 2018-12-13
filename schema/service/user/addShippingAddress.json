@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "properties": {
+    "state": { "type": "string" },
+    "city": { "type": "string" },
+    "district": { "type": "string" },
+    "street": { "type": "string" },
+    "number": { "type": "number" },
+    "reference": { "type": "string" },
+    "zipCode": { "type": "string" },
+    "complement": { "type": "string" }
+  },
+  "required": ["state", "city", "district", "street", "number", "zipCode"]
+}
