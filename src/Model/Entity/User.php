@@ -457,6 +457,30 @@ class User extends EntityAbstract
     }
 
     /**
+     * Aumenta os coins do usuário.
+     *
+     * @param float $coins
+     *
+     * @return User
+     */
+    public function increaseCoins(float $coins) {
+        $this->coins += $coins;
+        return $this;
+    }
+
+    /**
+     * Diminui os coins do usuário.
+     *
+     * @param float $coins
+     *
+     * @return User
+     */
+    public function decreaseCoins(float $coins) {
+        $this->coins -= $coins;
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toArray(): array

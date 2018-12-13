@@ -352,6 +352,30 @@ class Announcement extends EntityAbstract
     }
 
     /**
+     * Aumenta o estoque.
+     *
+     * @param int $quantity
+     *
+     * @return Announcement
+     */
+    public function increaseStock(int $quantity) {
+        $this->stock += $quantity;
+        return $this;
+    }
+
+    /**
+     * Diminui o estoque.
+     *
+     * @param int $quantity
+     *
+     * @return Announcement
+     */
+    public function decreaseStock(int $quantity) {
+        $this->stock -= $quantity;
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toArray(): array

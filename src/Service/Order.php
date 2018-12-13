@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Exception\ApiResponseException;
+use App\Exception\Repository\DataNotFoundException;
 use App\Exception\ValidationException;
 use App\Enum;
 use App\Model\Element;
@@ -25,11 +26,31 @@ class Order extends Contract
     private $announcementRepository;
 
     /**
+     * @var Repository\User
+     * @Inject
+     */
+    private $userRepository;
+
+    /**
+     * @var \App\Model\Entity\User
+     * @Inject
+     */
+    private $userLogged;
+
+    /**
      * @var Repository\Order
      * @Inject
      */
     private $orderRepository;
 
+    /**
+     * Cria um pedido e aplica todas as regras necessárias.
+     *
+     * @return Base\Response
+     *
+     * @throws ApiResponseException
+     * @throws ValidationException
+     */
     public function create()
     {
         try {
@@ -38,16 +59,31 @@ class Order extends Contract
 
             $order = Entity\Order::fromArray($body);
 
+            /** @var Element\Order\Item $item */
             foreach ($order->getItems() as $item) {
 
                 $announcement = $this->announcementRepository->getById($item->getCode());
 
-                $commissions = $this->getComissionsRecursive($announcement->getImpulses(), $item->getSeller());
+                if ($announcement->getStock() < $item->getQuantity()) {
 
-                $item->setComissions($commissions);
+                    throw new ApiResponseException('Não há estoque suficiente do produto.', HttpStatusCode::BAD_REQUEST());
+                }
+
+                $this->announcementRepository->save($announcement->decreaseStock($item->getQuantity()));
+
+                $comissions = $this->getComissionsRecursive($announcement->getImpulses(), $item->getSeller());
+                $item->setComissions($comissions);
+
+                $comissionPrice = (float) ($item->getImpulsePrice() / sizeof($item->getComissions())) * $item->getQuantity();
+
+                $this->applyComissions($item, $comissionPrice);
+
+                $this->payAnnouncementOwner($item, $comissionPrice);
             }
 
-            ~rt($order->toArray());
+            $this->customerPay($order);
+
+            $this->orderRepository->save($order);
 
             return Base\Response::create($order->toArray(), HttpStatusCode::OK());
 
@@ -87,6 +123,8 @@ class Order extends Contract
     }
 
     /**
+     * Retorna os códigos dos usuários que precisam receber comissão.
+     *
      * @param Element\Impulse[] $impulses
      * @param string $userCode
      *
@@ -108,5 +146,53 @@ class Order extends Contract
         }
 
         return $comissions;
+    }
+
+    /**
+     * Aplica as comissões de quem impulsionou o anúncio.
+     *
+     * @param Element\Order\Item $item
+     * @param float $comissionPrice
+     *
+     * @throws DataNotFoundException
+     */
+    private function applyComissions(Element\Order\Item $item, float $comissionPrice)
+    {
+        foreach ($item->getComissions() as $commission) {
+
+            $user = $this->userRepository->getById($commission);
+            $user->increaseCoins($comissionPrice);
+
+            $this->userRepository->save($user);
+        }
+    }
+
+    /**
+     * Paga o dono do anúncio.
+     *
+     * @param Element\Order\Item $item
+     * @param float $comissionPrice
+     *
+     * @throws DataNotFoundException
+     */
+    private function payAnnouncementOwner(Element\Order\Item $item, float $comissionPrice)
+    {
+        $announcement = $this->announcementRepository->getById($item->getCode());
+        $owner = $this->userRepository->getById(reset($announcement->getImpulses())->getOwner());
+
+        $priceUserOwnerGain = ($item->getCurrentPrice() * $item->getQuantity()) - $comissionPrice;
+
+        $this->userRepository->save($owner->increaseCoins($priceUserOwnerGain));
+    }
+
+    /**
+     * Desconta do comprador o valor do pedido.
+     *
+     * @param Entity\Order $order
+     */
+    private function customerPay(Entity\Order $order)
+    {
+        $this->userLogged->decreaseCoins($order->getTotalPrice());
+        $this->userRepository->save($this->userLogged);
     }
 }
