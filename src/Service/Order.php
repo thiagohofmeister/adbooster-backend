@@ -179,7 +179,7 @@ class Order extends Contract
         $announcement = $this->announcementRepository->getById($item->getCode());
         $owner = $this->userRepository->getById(reset($announcement->getImpulses())->getOwner());
 
-        $priceUserOwnerGain = ($item->getCurrentPrice() * $item->getQuantity()) - $item->getImpulsePrice();
+        $priceUserOwnerGain = ($item->getCurrentPrice() * $item->getQuantity()) - ($item->getImpulsePrice() * $item->getQuantity());
 
         $this->userRepository->save($owner->increaseCoins($priceUserOwnerGain));
     }
