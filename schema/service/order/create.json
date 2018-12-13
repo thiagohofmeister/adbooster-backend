@@ -44,7 +44,8 @@
       },
       "required": ["state", "city", "district", "street", "number", "zipCode"]
     },
-    "customer": { "type": "string" }
+    "customer": { "type": "string" },
+    "paymentMethod": { "type": "string" }
   },
-  "required": ["items", "billingAddress", "shippingAddress", "customer"]
+  "required": ["items", "billingAddress", "shippingAddress", "customer", "paymentMethod"]
 }

@@ -204,7 +204,7 @@ class Item extends ElementAbstract
             'currentPrice' => $this->getCurrentPrice(),
             'quantity' => $this->getQuantity(),
             'seller' => $this->getSeller(),
-            'comissions' => $this->getComissions(),
+            'comissions' => !empty($this->getComissions()) ? (array) $this->getComissions() : null,
             'impulsePrice' => $this->getImpulsePrice(),
         ];
     }
@@ -220,7 +220,7 @@ class Item extends ElementAbstract
             ->setCurrentPrice($array['currentPrice'])
             ->setQuantity($array['quantity'])
             ->setSeller($array['seller'])
-            ->setComissions(!empty($array['comissions']) ? $array['comissions'] : null)
+            ->setComissions(!empty($array['comissions']) ? (array) $array['comissions'] : null)
             ->setImpulsePrice(!empty($array['impulsePrice']) ? $array['impulsePrice'] : null);
     }
 }

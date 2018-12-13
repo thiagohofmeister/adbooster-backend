@@ -4,9 +4,7 @@ namespace App\Controller;
 
 use App\Core\Controller;
 use App\Exception\Repository\DataNotFoundException;
-use App\Exception\ValidationException;
 use App\Service\Base;
-use THS\Utils\Converter\Exception\JsonException;
 use THS\Utils\Enum\HttpMethod;
 use THS\Utils\Enum\HttpStatusCode;
 use App\Model\Entity;
@@ -52,6 +50,7 @@ class Register extends Controller
         }
 
         $user = Entity\User::fromArray($body);
+        $user->setImage('/static/images/no-photo.jpg');
 
         try {
 

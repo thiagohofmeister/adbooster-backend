@@ -37,6 +37,9 @@ class Order extends EntityAbstract
     /** @var \DateTime */
     private $updated;
 
+    /** @var Enum\Order\PaymentMethod */
+    private $paymentMethod;
+
     /**
      * Retorna a propriedade {@see Order::$items}.
      *
@@ -222,6 +225,29 @@ class Order extends EntityAbstract
     }
 
     /**
+     * Retorna a propriedade {@see Order::$paymentMethod}.
+     *
+     * @return Enum\Order\PaymentMethod
+     */
+    public function getPaymentMethod(): Enum\Order\PaymentMethod
+    {
+        return $this->paymentMethod;
+    }
+
+    /**
+     * Define a propriedade {@see Order::$paymentMethod}.
+     *
+     * @param Enum\Order\PaymentMethod $paymentMethod
+     *
+     * @return static|Order
+     */
+    public function setPaymentMethod(Enum\Order\PaymentMethod $paymentMethod)
+    {
+        $this->paymentMethod = $paymentMethod;
+        return $this;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toArray(): array
@@ -241,6 +267,7 @@ class Order extends EntityAbstract
             'status' => $this->getStatus()->value(),
             'created' => $this->getCreated()->format(Date::JAVASCRIPT_ISO_FORMAT),
             'updated' => $this->getUpdated()->format(Date::JAVASCRIPT_ISO_FORMAT),
+            'paymentMethod' => $this->getPaymentMethod()->value(),
         ];
 
         if (!empty($this->getId())) {
@@ -269,6 +296,7 @@ class Order extends EntityAbstract
             ->setCustomer($array['customer'])
             ->setStatus(Enum\Order\Status::memberByValue($array['status']))
             ->setCreated(new \DateTime($array['created']))
-            ->setUpdated(new \DateTime($array['updated']));
+            ->setUpdated(new \DateTime($array['updated']))
+            ->setPaymentMethod(Enum\Order\PaymentMethod::memberByValue($array['paymentMethod']));
     }
 }

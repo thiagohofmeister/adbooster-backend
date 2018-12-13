@@ -44,6 +44,71 @@ class Order extends Contract
     private $orderRepository;
 
     /**
+     * Retorna todos os pedidos do usuário logado.
+     *
+     * @return Base\Response
+     *
+     * @throws DataNotFoundException
+     */
+    public function index()
+    {
+        $total = 0;
+
+        try {
+
+            $page = $this->getRequest()->getQueryParam('page') ?: 1;
+            $limit = $this->getRequest()->getQueryParam('limit') ?: 0;
+
+            $orders = $this->orderRepository
+                ->setPaginated($page, $limit)
+                ->getByCustomer((string) $this->userLogged->getId());
+
+            $total = $this->orderRepository->getPaginationTotal();
+
+        } catch (\Throwable $throwable) {
+
+            $orders = [];
+        }
+
+        $ordersFormatted = [];
+        foreach ($orders as $order) {
+
+            $orderFormatted = $this->formatOrder($order);
+
+            $ordersFormatted[] = $orderFormatted;
+        }
+
+        return Base\Response::create([
+            'total' => $total,
+            'items' => $ordersFormatted
+        ], HttpStatusCode::OK());
+    }
+
+    /**
+     * Retorna um único pedido por código.
+     *
+     * @param string $code
+     *
+     * @return Base\Response
+     */
+    public function retrieve(string $code)
+    {
+        try {
+
+            $order = $this->orderRepository
+                ->getById($code);
+
+            $orderFormatted = $this->formatOrder($order);
+
+            return Base\Response::create($orderFormatted, HttpStatusCode::OK());
+
+        } catch (\Throwable $throwable) {
+
+            return Base\Response::create(['message' => 'Pedido não encontrado.'], HttpStatusCode::NOT_FOUND());
+        }
+    }
+
+    /**
      * Cria um pedido e aplica todas as regras necessárias.
      *
      * @return Base\Response
@@ -199,5 +264,29 @@ class Order extends Contract
     {
         $this->userLogged->decreaseCoins($order->getTotalPrice());
         $this->userRepository->save($this->userLogged);
+    }
+
+    /**
+     * Retorna pedido formatado para retornar na API.
+     *
+     * @param Entity\Order $order
+     *
+     * @return array
+     *
+     * @throws DataNotFoundException
+     */
+    private function formatOrder(Entity\Order $order)
+    {
+        $orderFormatted = $order->toArray();
+
+        foreach ($orderFormatted['items'] as &$item) {
+
+            $announcement = $this->announcementRepository->getById($item['code']);
+
+            $item['title'] = $announcement->getTitle();
+            $item['images'] = $announcement->getImages();
+        }
+
+        return $orderFormatted;
     }
 }

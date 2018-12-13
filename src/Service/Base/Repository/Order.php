@@ -30,19 +30,39 @@ class Order extends AbstractRepository
      *
      * @param string $code
      *
-     * @return Entity\Announcement
+     * @return Entity\Order
      *
      * @throws DataNotFoundException
      */
-    public function getById(string $code): Entity\Announcement
+    public function getById(string $code): Entity\Order
     {
         return $this->findOne(['_id' => new ObjectId($code)]);
     }
 
     /**
+     * Retorna um pedido pelo cliente.
+     *
+     * @param string $customerCode
+     *
+     * @return Entity\Order[]
+     *
+     * @throws \Exception
+     */
+    public function getByCustomer(string $customerCode)
+    {
+        $options = [
+            'skip' => $this->getOffset(),
+            'limit' => $this->getLimit(),
+            'sort' => ['created' => -1]
+        ];
+
+        return $this->find(['customer' => $customerCode], $options);
+    }
+
+    /**
      * @inheritDoc
      *
-     * @return Entity\Announcement
+     * @return Entity\Order
      */
     protected function fromDocument($document)
     {
@@ -62,7 +82,7 @@ class Order extends AbstractRepository
     /**
      * @inheritDoc
      *
-     * @param Entity\Announcement $entity
+     * @param Entity\Order $entity
      */
     protected function toDocument($entity)
     {

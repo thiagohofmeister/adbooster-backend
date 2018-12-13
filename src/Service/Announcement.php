@@ -171,6 +171,15 @@ class Announcement extends Contract
                 );
             }
 
+            if ($announcement->getImpulsePayoutLimit() <= 0) {
+                throw new ValidationException(
+                    'impulsePayoutLimit',
+                    ValidationException::GREATER_THAN,
+                    $announcement->getImpulsePayoutLimit(),
+                    'Preço pago por impulso deve ser mais que ZERO.'
+                );
+            }
+
             $this->announcementRepository->save($announcement);
 
             return Base\Response::create($announcement->toArray(), HttpStatusCode::OK());
