@@ -78,7 +78,7 @@ class Order extends Contract
 
                 $this->applyComissions($item, $comissionPrice);
 
-                $this->payAnnouncementOwner($item, $comissionPrice);
+                $this->payAnnouncementOwner($item);
             }
 
             $this->customerPay($order);
@@ -171,16 +171,15 @@ class Order extends Contract
      * Paga o dono do anúncio.
      *
      * @param Element\Order\Item $item
-     * @param float $comissionPrice
      *
      * @throws DataNotFoundException
      */
-    private function payAnnouncementOwner(Element\Order\Item $item, float $comissionPrice)
+    private function payAnnouncementOwner(Element\Order\Item $item)
     {
         $announcement = $this->announcementRepository->getById($item->getCode());
         $owner = $this->userRepository->getById(reset($announcement->getImpulses())->getOwner());
 
-        $priceUserOwnerGain = ($item->getCurrentPrice() * $item->getQuantity()) - $comissionPrice;
+        $priceUserOwnerGain = ($item->getCurrentPrice() * $item->getQuantity()) - $item->getImpulsePrice();
 
         $this->userRepository->save($owner->increaseCoins($priceUserOwnerGain));
     }
