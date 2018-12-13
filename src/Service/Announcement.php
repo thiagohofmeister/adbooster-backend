@@ -86,6 +86,10 @@ class Announcement extends Contract
         $formattedAnnouncements = [];
         foreach ($announcements as $announcement) {
 
+            if ($announcement->getStatus()->value() === Enum\Announcement\Status::PAUSED) {
+                continue;
+            }
+
             $impulse = reset($announcement->getImpulses());
 
             $this->announcementRepository->fillImpulses($announcement);

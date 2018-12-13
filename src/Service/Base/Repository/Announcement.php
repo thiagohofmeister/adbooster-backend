@@ -45,7 +45,7 @@ class Announcement extends AbstractRepository
      * @param string $userCode
      * @param array $friends
      *
-     * @return array
+     * @return Entity\Announcement[]
      *
      * @throws \Exception
      */

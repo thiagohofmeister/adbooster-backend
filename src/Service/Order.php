@@ -69,7 +69,13 @@ class Order extends Contract
                     throw new ApiResponseException('Não há estoque suficiente do produto.', HttpStatusCode::BAD_REQUEST());
                 }
 
-                $this->announcementRepository->save($announcement->decreaseStock($item->getQuantity()));
+                $announcement->decreaseStock($item->getQuantity());
+
+                if ($announcement->getStock() === 0) {
+                    $announcement->setStatus(Enum\Announcement\Status::PAUSED());
+                }
+
+                $this->announcementRepository->save($announcement);
 
                 $comissions = $this->getComissionsRecursive($announcement->getImpulses(), $item->getSeller());
                 $item->setComissions($comissions);
