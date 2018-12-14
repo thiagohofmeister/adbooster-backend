@@ -44,7 +44,7 @@ class Authenticate extends Controller
 
         try {
 
-            $user = $this->userRepository->getByEmail($body['email']);
+            $user = $this->userRepository->getByEmail(strtolower($body['email']));
 
             $this->checkAuthentication($user, $body['password']);
 

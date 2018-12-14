@@ -11,9 +11,10 @@
           "currentPrice": { "type": "number" },
           "quantity": { "type": "integer" },
           "seller": { "type": "string" },
+          "impulsedBy": { "type": "string" },
           "impulsePrice": { "type": "number" }
         },
-        "required": ["code", "previousPrice", "currentPrice", "quantity", "seller", "impulsePrice"]
+        "required": ["code", "previousPrice", "currentPrice", "quantity", "seller", "impulsedBy", "impulsePrice"]
       }
     },
     "billingAddress": {

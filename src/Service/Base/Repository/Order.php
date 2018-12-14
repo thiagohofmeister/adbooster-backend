@@ -60,6 +60,26 @@ class Order extends AbstractRepository
     }
 
     /**
+     * Retorna um pedido pelo vendedor.
+     *
+     * @param string $sellerCode
+     *
+     * @return Entity\Order[]
+     *
+     * @throws \Exception
+     */
+    public function getBySeller(string $sellerCode)
+    {
+        $options = [
+            'skip' => $this->getOffset(),
+            'limit' => $this->getLimit(),
+            'sort' => ['created' => -1]
+        ];
+
+        return $this->find(['items.seller' => $sellerCode], $options);
+    }
+
+    /**
      * @inheritDoc
      *
      * @return Entity\Order

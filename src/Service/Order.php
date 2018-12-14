@@ -85,6 +85,48 @@ class Order extends Contract
     }
 
     /**
+     * Retorna todos os pedidos de um vendedor.
+     *
+     * @return Base\Response
+     *
+     * @throws DataNotFoundException
+     */
+    public function retrieveBySeller()
+    {
+        $total = 0;
+
+        try {
+
+            $sellerCode = $this->getRequest()->getQueryParam('sellerCode');
+            $page = $this->getRequest()->getQueryParam('page') ?: 1;
+            $limit = $this->getRequest()->getQueryParam('limit') ?: 0;
+
+            $orders = $this->orderRepository
+                ->setPaginated($page, $limit)
+                ->getBySeller($sellerCode);
+
+            $total = $this->orderRepository->getPaginationTotal();
+
+        } catch (\Throwable $throwable) {
+
+            $orders = [];
+        }
+
+        $ordersFormatted = [];
+        foreach ($orders as $order) {
+
+            $orderFormatted = $this->formatOrder($order);
+
+            $ordersFormatted[] = $orderFormatted;
+        }
+
+        return Base\Response::create([
+            'total' => $total,
+            'items' => $ordersFormatted
+        ], HttpStatusCode::OK());
+    }
+
+    /**
      * Retorna um único pedido por código.
      *
      * @param string $code
@@ -142,7 +184,7 @@ class Order extends Contract
 
                 $this->announcementRepository->save($announcement);
 
-                $comissions = $this->getComissionsRecursive($announcement->getImpulses(), $item->getSeller());
+                $comissions = $this->getComissionsRecursive($announcement->getImpulses(), $item->getImpulsedBy());
                 $item->setComissions($comissions);
 
                 $comissionPrice = (float) ($item->getImpulsePrice() / sizeof($item->getComissions())) * $item->getQuantity();
@@ -156,7 +198,7 @@ class Order extends Contract
 
             $this->orderRepository->save($order);
 
-            return Base\Response::create($order->toArray(), HttpStatusCode::OK());
+            return Base\Response::create($this->formatOrder($order), HttpStatusCode::OK());
 
         } catch (ValidationException $exception) {
 

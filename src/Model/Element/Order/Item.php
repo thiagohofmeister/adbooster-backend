@@ -5,7 +5,7 @@ namespace App\Model\Element\Order;
 use App\Model\Element\ElementAbstract;
 
 /**
- * @todo Document class Item.
+ * Elemento de item do pedido.
  *
  * @author Thiago Hofmeister <thiago.hofmeister@gmail.com>
  */
@@ -25,6 +25,9 @@ class Item extends ElementAbstract
 
     /** @var string Código do vendedor. */
     private $seller;
+
+    /** @var string Código do usuário que impulsionou o anúncio. */
+    private $impulsedBy;
 
     /** @var array Códigos de todos que receberam dinheiro pelo impulso. */
     private $comissions;
@@ -129,7 +132,7 @@ class Item extends ElementAbstract
      *
      * @return string
      */
-    public function getSeller(): string
+    public function getSeller(): ?string
     {
         return $this->seller;
     }
@@ -141,9 +144,32 @@ class Item extends ElementAbstract
      *
      * @return static|Item
      */
-    public function setSeller(string $seller)
+    public function setSeller(?string $seller)
     {
         $this->seller = $seller;
+        return $this;
+    }
+
+    /**
+     * Retorna a propriedade {@see Item::$impulsedBy}.
+     *
+     * @return string
+     */
+    public function getImpulsedBy(): string
+    {
+        return $this->impulsedBy;
+    }
+
+    /**
+     * Define a propriedade {@see Item::$impulsedBy}.
+     *
+     * @param string $impulsedBy
+     *
+     * @return static|Item
+     */
+    public function setImpulsedBy(string $impulsedBy)
+    {
+        $this->impulsedBy = $impulsedBy;
         return $this;
     }
 
@@ -204,6 +230,7 @@ class Item extends ElementAbstract
             'currentPrice' => $this->getCurrentPrice(),
             'quantity' => $this->getQuantity(),
             'seller' => $this->getSeller(),
+            'impulsedBy' => $this->getImpulsedBy(),
             'comissions' => !empty($this->getComissions()) ? (array) $this->getComissions() : null,
             'impulsePrice' => $this->getImpulsePrice(),
         ];
@@ -219,7 +246,8 @@ class Item extends ElementAbstract
             ->setPreviousPrice($array['previousPrice'])
             ->setCurrentPrice($array['currentPrice'])
             ->setQuantity($array['quantity'])
-            ->setSeller($array['seller'])
+            ->setSeller(!empty($array['seller']) ? $array['seller'] : null)
+            ->setImpulsedBy($array['impulsedBy'])
             ->setComissions(!empty($array['comissions']) ? (array) $array['comissions'] : null)
             ->setImpulsePrice(!empty($array['impulsePrice']) ? $array['impulsePrice'] : null);
     }
